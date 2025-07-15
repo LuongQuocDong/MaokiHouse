@@ -12,7 +12,7 @@ interface HomestayFormData {
   price: string;
   airbnbLink: string;
   phone: string;
-  image: File | null;
+  images: File[];
 }
 
 interface HomestayData extends Omit<Homestay, 'id'> {
@@ -25,7 +25,7 @@ const initialFormData: HomestayFormData = {
   price: '',
   airbnbLink: '',
   phone: '',
-  image: null,
+  images: [],
 };
 
 // Cloudinary configuration
@@ -86,29 +86,34 @@ const Dashboard = () => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, image: file }));
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    setFormData(prev => ({ ...prev, images: files }));
   };
 
-  const uploadImageToCloudinary = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const uploadImagesToCloudinary = async (files: File[]): Promise<string[]> => {
+    const uploadPromises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('folder', 'maoki-house/homestays');
 
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: 'POST',
-        body: formData,
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
       }
-    );
 
-    if (!response.ok) {
-      throw new Error('Failed to upload image');
-    }
+      const data = await response.json();
+      return data.secure_url;
+    });
 
-    const data = await response.json();
-    return data.secure_url;
+    return Promise.all(uploadPromises);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -126,15 +131,15 @@ const Dashboard = () => {
         throw new Error('Failed to authenticate. Please try again.');
       }
 
-      let imageURL = '';
-      if (formData.image) {
+      let imageURLs: string[] = [];
+      if (formData.images.length > 0) {
         try {
-          toast.loading('Uploading image...', { id: 'imageUpload' });
-          imageURL = await uploadImageToCloudinary(formData.image);
-          toast.success('Image uploaded successfully', { id: 'imageUpload' });
+          toast.loading('Uploading images...', { id: 'imageUpload' });
+          imageURLs = await uploadImagesToCloudinary(formData.images);
+          toast.success('Images uploaded successfully', { id: 'imageUpload' });
         } catch (error) {
           console.error('Image upload error:', error);
-          toast.error('Failed to upload image. Please try again.', { id: 'imageUpload' });
+          toast.error('Failed to upload images. Please try again.', { id: 'imageUpload' });
           setSubmitting(false);
           return;
         }
@@ -148,7 +153,8 @@ const Dashboard = () => {
         airbnbLink: formData.airbnbLink.trim(),
         phone: formData.phone.trim(),
         timestamp: Date.now(),
-        imageURL: imageURL || (editingId ? homestays.find(h => h.id === editingId)?.imageURL : ''),
+        imageURLs: imageURLs.length > 0 ? imageURLs : (editingId ? homestays.find(h => h.id === editingId)?.imageURLs : []),
+        mainImageURL: imageURLs.length > 0 ? imageURLs[0] : (editingId ? homestays.find(h => h.id === editingId)?.mainImageURL : ''),
         updatedAt: Date.now(),
         updatedBy: auth.currentUser.uid
       };
@@ -168,7 +174,7 @@ const Dashboard = () => {
       fetchHomestays();
     } catch (error) {
       console.error('Error saving homestay:', error);
-      toast.error('Failed to save homestay. Please try again.', { id: 'saveHomestay' });
+      toast.error('Failed to save homestay. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -181,7 +187,7 @@ const Dashboard = () => {
       price: homestay.price.toString(),
       airbnbLink: homestay.airbnbLink,
       phone: homestay.phone,
-      image: null,
+      images: [], // Clear images for new form
     });
     setEditingId(homestay.id);
   };
@@ -209,40 +215,22 @@ const Dashboard = () => {
   }
 
   return (
-    <Container>
-      <h1 className="mb-4" style={{ color: '#824a39' }}>
-        {editingId ? 'Edit Homestay' : 'Add New Homestay'}
-      </h1>
-
-      <Card className="mb-4 shadow-sm">
+    <Container className="py-5">
+      <h1 className="mb-4">Manage Homestays</h1>
+      
+      <Card className="mb-5">
         <Card.Body>
           <Form onSubmit={handleSubmit}>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Title</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Price per night ($)</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+            <Form.Group className="mb-3">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
@@ -251,10 +239,27 @@ const Dashboard = () => {
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                rows={4}
+                rows={5}
                 required
               />
             </Form.Group>
+
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Price per Night ($)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    required
+                    min="0"
+                    step="0.01"
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
             <Row>
               <Col md={6}>
@@ -284,50 +289,30 @@ const Dashboard = () => {
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Image</Form.Label>
+              <Form.Label>Images</Form.Label>
               <Form.Control
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 required={!editingId}
+                multiple
               />
               <Form.Text className="text-muted">
-                {editingId ? 'Upload a new image to replace the existing one (optional)' : 'Please select an image'}
+                {editingId ? 'Upload new images to replace the existing ones (optional). The first image will be used as the main image.' : 'Please select one or more images. The first image will be used as the main image.'}
               </Form.Text>
             </Form.Group>
 
             <div className="d-flex gap-2">
-              <Button
-                type="submit"
-                disabled={submitting}
-                className="flex-grow-1"
-                style={{ backgroundColor: '#824a39', borderColor: '#824a39', color: '#fdf2e9' }}
-              >
-                {submitting ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="me-2"
-                    />
-                    {editingId ? 'Updating...' : 'Adding...'}
-                  </>
-                ) : (
-                  editingId ? 'Update Homestay' : 'Add Homestay'
-                )}
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Saving...' : (editingId ? 'Update Homestay' : 'Add Homestay')}
               </Button>
-
               {editingId && (
                 <Button
-                  variant="outline-secondary"
+                  variant="secondary"
                   onClick={() => {
-                    setFormData(initialFormData);
                     setEditingId(null);
+                    setFormData(initialFormData);
                   }}
-                  className="flex-grow-1"
                 >
                   Cancel Edit
                 </Button>
@@ -337,18 +322,23 @@ const Dashboard = () => {
         </Card.Body>
       </Card>
 
-      <h2 className="mb-3" style={{ color: '#824a39' }}>Manage Homestays</h2>
+      <h2 className="mb-4">Existing Homestays</h2>
       <Row className="g-4">
         {homestays.map((homestay) => (
           <Col key={homestay.id} xs={12}>
             <Card className="shadow-sm">
               <Card.Body className="d-flex align-items-center gap-3">
-                <img
-                  src={homestay.imageURL}
-                  alt={homestay.title}
-                  className="rounded"
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                />
+                <div className="d-flex gap-2" style={{ width: '300px', overflowX: 'auto' }}>
+                  {homestay.imageURLs?.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`${homestay.title} - Image ${index + 1}`}
+                      className="rounded"
+                      style={{ width: '100px', height: '100px', objectFit: 'cover', flexShrink: 0 }}
+                    />
+                  ))}
+                </div>
                 <div className="flex-grow-1">
                   <h3 className="h5 mb-1" style={{ color: '#824a39' }}>{homestay.title}</h3>
                   <p className="text-muted mb-0">${homestay.price}/night</p>

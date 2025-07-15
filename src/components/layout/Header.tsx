@@ -38,7 +38,11 @@ const Header = () => {
           onMouseOver={(e: React.MouseEvent<HTMLAnchorElement>) => e.currentTarget.style.opacity = '0.8'}
           onMouseOut={(e: React.MouseEvent<HTMLAnchorElement>) => e.currentTarget.style.opacity = '1'}
         >
-         <img src="/src/assets/images/logo.png" alt="Maoki House" style={{ width: '150px' }} />
+          <img 
+            src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607273/logo_gkzxvs.png" 
+            alt="Maoki House" 
+            style={{ width: '150px' }} 
+          />
         </Link>
 
         <nav className="d-flex gap-4 align-items-center">

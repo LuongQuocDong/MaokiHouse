@@ -18,7 +18,7 @@ const Home = () => {
       rating: 5,
       date: "1 day ago",
       content: "We really love the place! Very clean and cozy. It's also near Ben Tanh and there are a lot of restaurants and spa nearby. Thank you! We will come back and book this place again.",
-      avatar: "/src/assets/images/reviews/morgan.jpg"
+      avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607289/morgan_zoyu0h.jpg"
     },
     {
       name: "My",
@@ -26,7 +26,7 @@ const Home = () => {
       rating: 5,
       date: "1 week ago",
       content: "Our stay was very relaxing and the place was very clean, modern, and as described. Wonderful host who responded promptly and gave us some valuable information. Highly recommend this place. +1 for in-building laundry.",
-      avatar: "/src/assets/images/reviews/my.jpg"
+      avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607289/my_ntifbt.jpg"
     },
     {
       name: "Paige",
@@ -34,7 +34,7 @@ const Home = () => {
       rating: 5,
       date: "1 week ago",
       content: "Loved this place! Had such a great stay. The space is amazing and just as described. Would love to stay again!",
-      avatar: "/src/assets/images/reviews/paige.jpg"
+      avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607290/paige_u9jyks.jpg"
     }
   ];
 
@@ -112,7 +112,7 @@ const Home = () => {
               >
                 <div className="image-container">
                   <img
-                    src={homestay.imageURL}
+                    src={homestay.mainImageURL || homestay.imageURL} // Fallback to imageURL for backward compatibility
                     alt={homestay.title}
                     className="card-img-top"
                     style={{ height: '200px', objectFit: 'cover' }}

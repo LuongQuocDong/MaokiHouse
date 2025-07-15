@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="row">
           <div className="col-md-6">
             <img
-              src="/src/assets/images/logo.png"
+              src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607273/logo_gkzxvs.png"
               alt="Maoki House"
               style={{ width: '150px' }}
             />

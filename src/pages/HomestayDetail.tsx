@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import { ref, get } from 'firebase/database';
 import { database } from '../config/firebase';
 import type { Homestay } from '../types';
+import { Carousel } from 'react-bootstrap';
 
 const HomestayDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [homestay, setHomestay] = useState<Homestay | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchHomestay = async () => {
@@ -47,15 +49,50 @@ const HomestayDetail = () => {
     );
   }
 
+  // Use imageURLs if available, otherwise fallback to single imageURL
+  const images = homestay.imageURLs?.length ? homestay.imageURLs : [homestay.imageURL || homestay.mainImageURL];
+
   return (
     <div className="container-fluid max-width-4xl mx-auto px-0">
       <div className="position-relative mb-4">
-        <img
-          src={homestay.imageURL}
-          alt={homestay.title}
-          className="w-100 rounded"
-          style={{ height: '400px', objectFit: 'cover' }}
-        />
+        <Carousel
+          activeIndex={selectedImageIndex}
+          onSelect={(index) => setSelectedImageIndex(index)}
+          interval={null}
+        >
+          {images.map((imageUrl, index) => (
+            <Carousel.Item key={index}>
+              <img
+                src={imageUrl}
+                alt={`${homestay.title} - Image ${index + 1}`}
+                className="w-100 rounded"
+                style={{ height: '400px', objectFit: 'cover' }}
+              />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+
+        {images.length > 1 && (
+          <div className="mt-3 d-flex gap-2 overflow-auto pb-2">
+            {images.map((imageUrl, index) => (
+              <img
+                key={index}
+                src={imageUrl}
+                alt={`${homestay.title} - Thumbnail ${index + 1}`}
+                className={`rounded cursor-pointer ${index === selectedImageIndex ? 'border border-primary' : ''}`}
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  objectFit: 'cover',
+                  cursor: 'pointer',
+                  opacity: index === selectedImageIndex ? 1 : 0.7,
+                  transition: 'opacity 0.3s ease'
+                }}
+                onClick={() => setSelectedImageIndex(index)}
+              />
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="card shadow">
@@ -96,6 +133,17 @@ const HomestayDetail = () => {
           </div>
         </div>
       </div>
+
+      <style>
+        {`
+          .cursor-pointer {
+            cursor: pointer;
+          }
+          .cursor-pointer:hover {
+            opacity: 0.9 !important;
+          }
+        `}
+      </style>
     </div>
   );
 };
