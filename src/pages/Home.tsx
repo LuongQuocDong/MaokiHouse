@@ -1,0 +1,230 @@
+import { useState, useEffect } from 'react';
+import { ref, get, query, orderByChild } from 'firebase/database';
+import { Link } from 'react-router-dom';
+import { database } from '../config/firebase';
+import type { Homestay } from '../types';
+import HomeCarousel from '../components/Carousel';
+import Welcome from '../components/Welcome';
+
+const Home = () => {
+  const [homestays, setHomestays] = useState<Homestay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const reviews = [
+    {
+      name: "Morgan Louise",
+      location: "Manila, Philippines",
+      rating: 5,
+      date: "1 day ago",
+      content: "We really love the place! Very clean and cozy. It's also near Ben Tanh and there are a lot of restaurants and spa nearby. Thank you! We will come back and book this place again.",
+      avatar: "/src/assets/images/reviews/morgan.jpg"
+    },
+    {
+      name: "My",
+      location: "Munich, Germany",
+      rating: 5,
+      date: "1 week ago",
+      content: "Our stay was very relaxing and the place was very clean, modern, and as described. Wonderful host who responded promptly and gave us some valuable information. Highly recommend this place. +1 for in-building laundry.",
+      avatar: "/src/assets/images/reviews/my.jpg"
+    },
+    {
+      name: "Paige",
+      location: "Ho Chi Minh City, Vietnam",
+      rating: 5,
+      date: "1 week ago",
+      content: "Loved this place! Had such a great stay. The space is amazing and just as described. Would love to stay again!",
+      avatar: "/src/assets/images/reviews/paige.jpg"
+    }
+  ];
+
+  useEffect(() => {
+    const fetchHomestays = async () => {
+      try {
+        const homestaysRef = ref(database, 'homestays');
+        const homestaysQuery = query(homestaysRef, orderByChild('timestamp'));
+        const snapshot = await get(homestaysQuery);
+        
+        if (snapshot.exists()) {
+          const homestayData: Homestay[] = [];
+          snapshot.forEach((childSnapshot) => {
+            homestayData.push({
+              id: childSnapshot.key as string,
+              ...childSnapshot.val()
+            } as Homestay);
+          });
+          homestayData.sort((a, b) => b.timestamp - a.timestamp);
+          setHomestays(homestayData);
+        } else {
+          setHomestays([]);
+        }
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching homestays:', error);
+        setError('Failed to load homestays. Please refresh the page.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomestays();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        {error}
+      </div>
+    );
+  }
+
+  if (homestays.length === 0) {
+    return (
+      <div className="text-center py-5">
+        <h1 className="display-4 text-primary mb-4">Our Homestays</h1>
+        <p className="text-muted">No homestays available at the moment.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <HomeCarousel />
+      <Welcome />
+      <div className="container">
+        <h1 className="display-4 text-primary mb-4">Our Homestays</h1>
+        <div className="row g-4 mb-5">
+          {homestays.map((homestay) => (
+            <div key={homestay.id} className="col-12 col-md-6 col-lg-4">
+              <Link
+                to={`/detail/${homestay.id}`}
+                className="text-decoration-none"
+              >
+                <div className="image-container">
+                  <img
+                    src={homestay.imageURL}
+                    alt={homestay.title}
+                    className="card-img-top"
+                    style={{ height: '200px', objectFit: 'cover' }}
+                  />
+                  <div className="image-overlay">
+                    <div className="h4 mb-2">${homestay.price}/night</div>
+                    <div>Click to view details</div>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <h2 className="h5 card-title text-primary">
+                    {homestay.title}
+                  </h2>
+                  <p className="card-text text-muted" style={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: '2',
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
+                  }}>
+                    {homestay.description}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section className="py-5">
+        <div className="container">
+          <h2 className="display-5 text-primary text-center mb-5">Guest Reviews</h2>
+          <div className="row g-4">
+            {reviews.map((review, index) => (
+              <div key={index} className="col-md-4">
+                <div className="card h-100 border-0 shadow-sm" style={{ backgroundColor: '#ffe6d8' }}>
+                  <div className="card-body">
+                    <div className="d-flex align-items-center mb-3">
+                      <img
+                        src={review.avatar}
+                        alt={review.name}
+                        className="rounded-circle me-3"
+                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                      />
+                      <div>
+                        <h5 className="mb-0">{review.name}</h5>
+                        <div className="text-muted small">{review.location}</div>
+                      </div>
+                    </div>
+                    <div className="mb-2">
+                      {'★'.repeat(review.rating)}
+                      <span className="text-muted small ms-2">{review.date}</span>
+                    </div>
+                    <p className="card-text">{review.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <style>
+        {`
+          .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+          }
+
+          .image-overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .image-container:hover .image-overlay {
+            transform: translateY(0);
+          }
+
+          .image-overlay .h4 {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease 0.1s;
+          }
+
+          .image-overlay div:last-child {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease 0.2s;
+          }
+
+          .image-container:hover .image-overlay .h4,
+          .image-container:hover .image-overlay div:last-child {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        `}
+      </style>
+    </div>
+  );
+};
+
+export default Home; 

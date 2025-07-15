@@ -1,0 +1,103 @@
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { ref, get } from 'firebase/database';
+import { database } from '../config/firebase';
+import type { Homestay } from '../types';
+
+const HomestayDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const [homestay, setHomestay] = useState<Homestay | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHomestay = async () => {
+      try {
+        if (!id) return;
+        const homestayRef = ref(database, `homestays/${id}`);
+        const snapshot = await get(homestayRef);
+        
+        if (snapshot.exists()) {
+          setHomestay({ id: snapshot.key as string, ...snapshot.val() } as Homestay);
+        }
+      } catch (error) {
+        console.error('Error fetching homestay:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomestay();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!homestay) {
+    return (
+      <div className="text-center py-5">
+        <h2 className="display-6 text-primary">Homestay not found</h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container-fluid max-width-4xl mx-auto px-0">
+      <div className="position-relative mb-4">
+        <img
+          src={homestay.imageURL}
+          alt={homestay.title}
+          className="w-100 rounded"
+          style={{ height: '400px', objectFit: 'cover' }}
+        />
+      </div>
+      
+      <div className="card shadow">
+        <div className="card-body">
+          <h1 className="display-5 text-primary mb-4">{homestay.title}</h1>
+          <p className="text-muted mb-4" style={{ whiteSpace: 'pre-line' }}>{homestay.description}</p>
+          
+          <div className="border-top pt-4">
+            <div className="row align-items-center">
+              <div className="col-12 col-md-6 mb-3 mb-md-0">
+                <div className="h3 text-primary mb-0">
+                  ${homestay.price}/night
+                </div>
+              </div>
+              
+              <div className="col-12 col-md-6">
+                <div className="d-flex gap-3 justify-content-md-end">
+                  <a
+                    href={homestay.airbnbLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-danger"
+                    style={{ backgroundColor: '#ff385c', borderColor: '#ff385c' }}
+                  >
+                    Book on Airbnb
+                  </a>
+                  
+                  <a
+                    href={`tel:${homestay.phone}`}
+                    className="btn btn-primary d-flex align-items-center gap-2"
+                  >
+                    <i className="bi bi-telephone"></i>
+                    Call Host
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HomestayDetail; 
