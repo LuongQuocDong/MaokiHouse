@@ -22,6 +22,27 @@ export interface WelcomeContent {
   updatedBy?: string;
 }
 
+export interface AboutUsContent {
+  id: string;
+  mainTitle: string;
+  mainDescription: string;
+  introText: string;
+  ourStory: {
+    title: string;
+    content: string;
+  };
+  localExperience: {
+    title: string;
+    content: string;
+  };
+  whyChooseUs: {
+    title: string;
+    benefits: string[];
+  };
+  updatedAt?: number;
+  updatedBy?: string;
+}
+
 export interface User {
   uid: string;
   email: string;
