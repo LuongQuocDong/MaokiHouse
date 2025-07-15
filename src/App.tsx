@@ -1,16 +1,43 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Container } from 'react-bootstrap';
+import { AnimatePresence } from 'framer-motion';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import Home from './pages/Home';
-import HomestayDetail from './pages/HomestayDetail';
-import AdminLogin from './pages/admin/Login';
-import AdminDashboard from './pages/admin/Dashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import AboutUs from './pages/AboutUs';
-import ContactUs from './components/ContactUs';
 import ContactPanel from './components/ContactPanel';
+import PageTransition from './components/PageTransition';
+import LoadingSpinner from './components/LoadingSpinner';
+import { Suspense } from 'react';
+import * as Pages from './pages';
+
+const AppRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Suspense fallback={<LoadingSpinner />}>
+        <PageTransition>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Pages.Home />} />
+            <Route path="/about" element={<Pages.AboutUs />} />
+            <Route path="/contact" element={<Pages.ContactUs />} />
+            <Route path="/detail/:id" element={<Pages.HomestayDetail />} />
+            <Route path="/admin" element={<Pages.AdminLogin />} />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Pages.AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </PageTransition>
+      </Suspense>
+    </AnimatePresence>
+  );
+};
 
 function App() {
   return (
@@ -20,21 +47,7 @@ function App() {
         <Header />
         <main className="flex-grow-1 py-4">
           <Container>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/contact" element={<ContactUs />} />
-              <Route path="/detail/:id" element={<HomestayDetail />} />
-              <Route path="/admin" element={<AdminLogin />} />
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
+            <AppRoutes />
           </Container>
         </main>
         <Footer />
