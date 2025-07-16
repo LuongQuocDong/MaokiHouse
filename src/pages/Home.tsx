@@ -5,6 +5,7 @@ import { database } from '../config/firebase';
 import type { Homestay } from '../types';
 import HomeCarousel from '../components/Carousel';
 import Welcome from '../components/Welcome';
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const [homestays, setHomestays] = useState<Homestay[]>([]);
@@ -106,68 +107,81 @@ const Home = () => {
         <div className="row g-4 mb-5">
           {homestays.map((homestay) => (
             <div key={homestay.id} className="col-12 col-md-6 col-lg-4">
-              <Link
-                to={`/detail/${homestay.id}`}
-                className="text-decoration-none"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{ display: 'inline-block', width: '100%' }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <div className="image-container">
-                  <img
-                    src={homestay.mainImageURL || homestay.imageURL} // Fallback to imageURL for backward compatibility
-                    alt={homestay.title}
-                    className="card-img-top"
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
-                  <div className="image-overlay">
-                    <div className="h4 mb-2">${homestay.price}/night</div>
-                    <div>Click to view details</div>
+                <Link
+                  to={`/detail/${homestay.id}`}
+                  className="text-decoration-none"
+                >
+                  <div className="image-container">
+                    <img
+                      src={homestay.mainImageURL || homestay.imageURL} // Fallback to imageURL for backward compatibility
+                      alt={homestay.title}
+                      className="card-img-top"
+                      style={{ height: '200px', objectFit: 'cover' }}
+                    />
+                    <div className="image-overlay">
+                      <div className="h4 mb-2">${homestay.price}/night</div>
+                      <div>Click to view details</div>
+                    </div>
                   </div>
-                </div>
-                <div className="card-body">
-                  <h2 className="h5 card-title text-primary">
-                    {homestay.title}
-                  </h2>
-                  <p className="card-text text-muted" style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: '2',
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>
-                    {homestay.description}
-                  </p>
-                </div>
-              </Link>
+                  <div className="card-body mt-3">
+                    <h2 className="h5 card-title text-primary">
+                      {homestay.title}
+                    </h2>
+                    <p className="card-text text-muted" style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: '2',
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>
+                      {homestay.description}
+                    </p>
+                  </div>
+                </Link>
+              </motion.div>
             </div>
           ))}
         </div>
       </div>
 
-      <section className="py-5">
+      <section className="py-5" style={{ backgroundColor: '#ffe6d8' }}>
         <div className="container">
           <h2 className="display-5 text-primary text-center mb-5">Guest Reviews</h2>
           <div className="row g-4">
             {reviews.map((review, index) => (
               <div key={index} className="col-md-4">
-                <div className="card h-100 border-0 shadow-sm" style={{ backgroundColor: '#ffe6d8' }}>
-                  <div className="card-body">
-                    <div className="d-flex align-items-center mb-3">
-                      <img
-                        src={review.avatar}
-                        alt={review.name}
-                        className="rounded-circle me-3"
-                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                      />
-                      <div>
-                        <h5 className="mb-0">{review.name}</h5>
-                        <div className="text-muted small">{review.location}</div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <div className="card h-100 border-0 shadow-sm" style={{ backgroundColor: '#ffe6d8' }}>
+                    <div className="card-body">
+                      <div className="d-flex align-items-center mb-3">
+                        <img
+                          src={review.avatar}
+                          alt={review.name}
+                          className="rounded-circle me-3"
+                          style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                        />
+                        <div>
+                          <h5 className="mb-0">{review.name}</h5>
+                          <div className="text-muted small">{review.location}</div>
+                        </div>
                       </div>
+                      <div className="mb-2">
+                        {'★'.repeat(review.rating)}
+                        <span className="text-muted small ms-2">{review.date}</span>
+                      </div>
+                      <p className="card-text">{review.content}</p>
                     </div>
-                    <div className="mb-2">
-                      {'★'.repeat(review.rating)}
-                      <span className="text-muted small ms-2">{review.date}</span>
-                    </div>
-                    <p className="card-text">{review.content}</p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             ))}
           </div>
@@ -180,6 +194,7 @@ const Home = () => {
             position: relative;
             overflow: hidden;
             border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           }
 
           .image-overlay {

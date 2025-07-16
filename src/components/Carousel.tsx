@@ -2,11 +2,16 @@ import { Carousel } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { ref, get } from 'firebase/database';
 import { database } from '../config/firebase';
+import { motion } from 'framer-motion';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import type { Homestay } from '../types';
 
 const HomeCarousel = () => {
   const [airbnbLink, setAirbnbLink] = useState('');
   const [isHovered, setIsHovered] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [mouseX, setMouseX] = useState(0);
+  const [showControls, setShowControls] = useState(false);
 
   useEffect(() => {
     const fetchFirstHomestay = async () => {
@@ -26,6 +31,11 @@ const HomeCarousel = () => {
 
     fetchFirstHomestay();
   }, []);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMouseX(e.clientX - rect.left);
+  };
 
   const images = [
     {
@@ -55,15 +65,32 @@ const HomeCarousel = () => {
     }
   ];
 
+  const handleSelect = (selectedIndex: number) => {
+    setIndex(selectedIndex);
+  };
+
   return (
     <div 
       className="position-relative mb-5"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        setShowControls(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setShowControls(false);
+      }}
+      onMouseMove={handleMouseMove}
     >
-      <Carousel>
-        {images.map((image, index) => (
-          <Carousel.Item key={index}>
+      <Carousel
+        activeIndex={index}
+        onSelect={handleSelect}
+        interval={5000}
+        className="carousel-custom"
+        controls={false}
+      >
+        {images.map((image, idx) => (
+          <Carousel.Item key={idx}>
             <img
               className="d-block w-100"
               src={image.url}
@@ -78,7 +105,8 @@ const HomeCarousel = () => {
               style={{
                 backgroundColor: 'rgba(130, 74, 57, 0.7)',
                 borderRadius: '8px',
-                padding: '15px'
+                padding: '15px',
+                backdropFilter: 'blur(4px)'
               }}
             >
               <h3>{image.caption}</h3>
@@ -86,46 +114,169 @@ const HomeCarousel = () => {
           </Carousel.Item>
         ))}
       </Carousel>
+
+      {/* Custom Carousel Controls */}
+      {showControls && (
+        <>
+          <motion.button
+            className="carousel-control-btn prev"
+            onClick={() => handleSelect(index === 0 ? images.length - 1 : index - 1)}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ 
+              opacity: mouseX < window.innerWidth / 2 ? 1 : 0,
+              x: mouseX < window.innerWidth / 2 ? 0 : -20
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChevronLeft size={24} />
+          </motion.button>
+          <motion.button
+            className="carousel-control-btn next"
+            onClick={() => handleSelect(index === images.length - 1 ? 0 : index + 1)}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ 
+              opacity: mouseX >= window.innerWidth / 2 ? 1 : 0,
+              x: mouseX >= window.innerWidth / 2 ? 0 : 20
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChevronRight size={24} />
+          </motion.button>
+        </>
+      )}
+
       {airbnbLink && (
         <div 
           className="position-absolute top-50 start-50 translate-middle"
           style={{
             opacity: isHovered ? 1 : 0,
             visibility: isHovered ? 'visible' : 'hidden',
-            transition: 'all 0.5s ease'
+            transition: 'all 0.3s ease',
+            zIndex: 10
           }}
         >
-          <a
-            href={airbnbLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-danger btn-lg"
-            style={{
-              backgroundColor: 'rgba(255, 56, 92, 0.9)',
-              borderColor: '#ff385c',
-              borderRadius: '50px',
-              padding: '15px 30px',
-              fontSize: '1.2rem',
-              fontWeight: '600',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(4px)'
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
-              e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 1)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 0.9)';
-            }}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{ display: 'inline-block' }}
           >
-            Book Now on Airbnb
-          </a>
+            <motion.a
+              href={airbnbLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-danger btn-lg"
+              style={{
+                backgroundColor: 'rgba(255, 56, 92, 0.9)',
+                border: '2px solid #ff385c',
+                color: 'white',
+                padding: '15px 30px',
+                borderRadius: '50px',
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                textDecoration: 'none',
+                display: 'inline-block',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(4px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 1)';
+                e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 0.9)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              Book Now on Airbnb
+            </motion.a>
+          </motion.div>
         </div>
       )}
+
+      <style>
+        {`
+          .carousel-custom {
+            position: relative;
+          }
+
+          .carousel-item {
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          }
+
+          .carousel-indicators {
+            margin-bottom: 2rem;
+            gap: 8px;
+          }
+
+          .carousel-indicators [data-bs-target] {
+            width: 30px !important;
+            height: 4px !important;
+            border-radius: 4px !important;
+            margin: 0 !important;
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            border: none !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative;
+            opacity: 0.5;
+          }
+
+          .carousel-indicators .active {
+            background-color: #fff !important;
+            opacity: 1;
+            width: 45px !important;
+          }
+
+          .carousel-indicators [data-bs-target]:hover {
+            opacity: 0.8;
+            width: 35px !important;
+          }
+
+          .carousel-control-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #824a39;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 5;
+          }
+
+          .carousel-control-btn.prev {
+            left: 20px;
+          }
+
+          .carousel-control-btn.next {
+            right: 20px;
+          }
+
+          .carousel-caption {
+            bottom: 2rem;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+          }
+
+          .carousel-caption h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          }
+        `}
+      </style>
     </div>
   );
 };
