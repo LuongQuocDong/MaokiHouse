@@ -8,7 +8,7 @@ import { auth } from '../../config/firebase';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiLogOut } from 'react-icons/bi';
-import { FaInfoCircle, FaEnvelope, FaChartBar } from 'react-icons/fa';
+import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 
 interface NavButtonProps {
@@ -177,7 +177,7 @@ const Header = () => {
           className="p-0"
         >
           <motion.img 
-            src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607273/logo_gkzxvs.png" 
+            src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752678018/logo_skiner.png" 
             alt="Maoki House" 
             style={{ width: '150px' }} 
             whileHover={{ scale: 1.05 }}
@@ -225,6 +225,10 @@ const Header = () => {
                     className="d-flex flex-column align-items-start gap-3 w-100 py-3"
                   >
                     <motion.div variants={mobileNavLinkVariants}>
+                      <NavButton to="/" icon={FaHome} mobile>Home</NavButton>
+                    </motion.div>
+
+                    <motion.div variants={mobileNavLinkVariants}>
                       <NavButton to="/about" icon={FaInfoCircle} mobile>About Us</NavButton>
                     </motion.div>
 
@@ -254,15 +258,13 @@ const Header = () => {
                   exit="exit"
                   className="d-flex align-items-center gap-3"
                 >
+                  <NavButton to="/" icon={FaHome}>Home</NavButton>
                   <NavButton to="/about" icon={FaInfoCircle}>About Us</NavButton>
                   <NavButton to="/contact" icon={FaEnvelope}>Contact Us</NavButton>
-
                   {user && (
                     <>
                       <NavButton to="/admin/dashboard" icon={FaChartBar}>Dashboard</NavButton>
-                      <div className="ms-2">
-                        <LogoutButton />
-                      </div>
+                      <LogoutButton />
                     </>
                   )}
                 </motion.div>

@@ -35,6 +35,11 @@ const ContactPanel = () => {
             <i className="bi bi-envelope contact-icon"></i>
             <span>maokihouse.sg@gmail.com</span>
           </a>
+
+          <a href="https://www.airbnb.com/users/show/502109503" target="_blank" rel="noopener noreferrer" className="contact-item">
+            <i className="bi bi-house-heart contact-icon"></i>
+            <span>Our Airbnb Profile</span>
+          </a>
         </div>
 
         <style>

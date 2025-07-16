@@ -16,7 +16,7 @@ const Home = () => {
       name: "Morgan Louise",
       location: "Manila, Philippines",
       rating: 5,
-      date: "1 day ago",
+      date: "13 July 2025",
       content: "We really love the place! Very clean and cozy. It's also near Ben Tanh and there are a lot of restaurants and spa nearby. Thank you! We will come back and book this place again.",
       avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607289/morgan_zoyu0h.jpg"
     },
@@ -24,7 +24,7 @@ const Home = () => {
       name: "My",
       location: "Munich, Germany",
       rating: 5,
-      date: "1 week ago",
+      date: "9 July 2025",
       content: "Our stay was very relaxing and the place was very clean, modern, and as described. Wonderful host who responded promptly and gave us some valuable information. Highly recommend this place. +1 for in-building laundry.",
       avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607289/my_ntifbt.jpg"
     },
@@ -32,7 +32,7 @@ const Home = () => {
       name: "Paige",
       location: "Ho Chi Minh City, Vietnam",
       rating: 5,
-      date: "1 week ago",
+      date: "6 July 2025",
       content: "Loved this place! Had such a great stay. The space is amazing and just as described. Would love to stay again!",
       avatar: "https://res.cloudinary.com/dlkejgkqk/image/upload/v1752607290/paige_u9jyks.jpg"
     }
