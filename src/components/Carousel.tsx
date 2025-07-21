@@ -8,7 +8,6 @@ import type { Homestay } from '../types';
 
 const HomeCarousel = () => {
   const [airbnbLink, setAirbnbLink] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
   const [index, setIndex] = useState(0);
   const [mouseX, setMouseX] = useState(0);
   const [showControls, setShowControls] = useState(false);
@@ -83,11 +82,9 @@ const HomeCarousel = () => {
     <div 
       className="position-relative mb-5"
       onMouseEnter={() => {
-        setIsHovered(true);
         setShowControls(true);
       }}
       onMouseLeave={() => {
-        setIsHovered(false);
         setShowControls(false);
       }}
       onMouseMove={handleMouseMove}
@@ -171,7 +168,7 @@ const HomeCarousel = () => {
                 e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
               }}
             >
-              Book Now on Airbnb
+              Book Now
             </motion.a>
           </motion.div>
         </div>

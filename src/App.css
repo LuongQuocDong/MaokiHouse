@@ -83,13 +83,68 @@ main {
   margin-top: 80px;
 }
 
-/* Mobile Menu Styles */
+/* Book Now Mobile Button */
+.book-now-mobile-btn {
+  position: absolute;
+  right: 75px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffe6d8;
+  border: 2px solid #ffe6d8;
+  color: #824a39;
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  z-index: 1031; /* Higher than navbar-collapse */
+}
+
+/* Ensure it stays visible with expanded menu */
+.navbar-collapse.show + .book-now-mobile-btn,
+.navbar-collapse.collapsing + .book-now-mobile-btn {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.book-now-mobile-btn:hover,
+.book-now-mobile-btn:active {
+  background-color: #824a39;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 576px) {
+  .book-now-mobile-btn {
+    right: 65px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    background-color: #ffe6d8; /* Match other header buttons */
+    color: #824a39;
+  }
+}
+
+@media (max-width: 400px) {
+  .book-now-mobile-btn {
+    right: 60px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile Menu Styles with smooth dropdown */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     background-color: #824a39;
     padding: 1rem;
     margin: 0 -1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: height 0.35s ease; /* Smooth dropdown animation */
+    overflow: hidden;
   }
 
   .nav-link-custom {

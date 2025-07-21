@@ -190,17 +190,18 @@ const Header = () => {
     </motion.div>
   );
 
-  // Book Now button for mobile view
+  // Book Now button for mobile view - styled to match other header buttons
   const BookNowMobileButton = () => (
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       style={{ 
-        display: 'inline-block',
+        display: expanded ? 'none' : 'inline-block', // Hide when menu is expanded
         position: 'absolute',
-        right: '80px',
+        right: '75px',
         top: '50%',
-        transform: 'translateY(-50%)'
+        transform: 'translateY(-50%)',
+        zIndex: 1031
       }}
     >
       <a
@@ -254,7 +255,7 @@ const Header = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
-      <Container>
+      <Container className="position-relative"> {/* Added position-relative for absolute positioning context */}
         <Navbar.Brand 
           as={Link} 
           to="/"
