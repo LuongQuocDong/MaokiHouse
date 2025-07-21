@@ -8,7 +8,7 @@ import { auth } from '../../config/firebase';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiLogOut } from 'react-icons/bi';
-import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome } from 'react-icons/fa';
+import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome, FaCalendarAlt } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 
 interface NavButtonProps {
@@ -16,6 +16,7 @@ interface NavButtonProps {
   icon: IconType;
   children: ReactNode;
   mobile?: boolean;
+  external?: boolean;
 }
 
 const Header = () => {
@@ -74,45 +75,81 @@ const Header = () => {
     open: { opacity: 1, x: 0 }
   };
 
-  const NavButton = ({ to, icon: Icon, children, mobile = false }: NavButtonProps) => (
+  const NavButton = ({ to, icon: Icon, children, mobile = false, external = false }: NavButtonProps) => (
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       style={{ display: 'inline-block' }}
     >
-      <Link
-        to={to}
-        onClick={() => mobile && setExpanded(false)}
-        className="text-decoration-none"
-      >
-        <div
-          className="d-flex align-items-center gap-2"
-          style={{
-            backgroundColor: location.pathname === to ? '#ffe6d8' : 'transparent',
-            border: '2px solid #ffe6d8',
-            color: location.pathname === to ? '#824a39' : '#ffe6d8',
-            padding: '0.5rem 1rem',
-            borderRadius: '25px',
-            fontSize: '1.1rem',
-            fontWeight: '500',
-            transition: 'all 0.3s ease',
-            whiteSpace: 'nowrap'
-          }}
-          onMouseEnter={(e) => {
-            if (location.pathname !== to) {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 230, 216, 0.1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (location.pathname !== to) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }
-          }}
+      {external ? (
+        <a
+          href={to}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => mobile && setExpanded(false)}
+          className="text-decoration-none"
         >
-          <Icon size={20} />
-          {children}
-        </div>
-      </Link>
+          <div
+            className="d-flex align-items-center gap-2"
+            style={{
+              backgroundColor: '#ffe6d8',
+              border: '2px solid #ffe6d8',
+              color: '#824a39',
+              padding: '0.5rem 1rem',
+              borderRadius: '25px',
+              fontSize: '1.1rem',
+              fontWeight: '500',
+              transition: 'all 0.3s ease',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#824a39';
+              e.currentTarget.style.color = '#ffe6d8';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ffe6d8';
+              e.currentTarget.style.color = '#824a39';
+            }}
+          >
+            <Icon size={20} />
+            {children}
+          </div>
+        </a>
+      ) : (
+        <Link
+          to={to}
+          onClick={() => mobile && setExpanded(false)}
+          className="text-decoration-none"
+        >
+          <div
+            className="d-flex align-items-center gap-2"
+            style={{
+              backgroundColor: location.pathname === to ? '#ffe6d8' : 'transparent',
+              border: '2px solid #ffe6d8',
+              color: location.pathname === to ? '#824a39' : '#ffe6d8',
+              padding: '0.5rem 1rem',
+              borderRadius: '25px',
+              fontSize: '1.1rem',
+              fontWeight: '500',
+              transition: 'all 0.3s ease',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => {
+              if (location.pathname !== to) {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 230, 216, 0.1)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== to) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
+          >
+            <Icon size={20} />
+            {children}
+          </div>
+        </Link>
+      )}
     </motion.div>
   );
 
@@ -153,6 +190,54 @@ const Header = () => {
     </motion.div>
   );
 
+  // Book Now button for mobile view
+  const BookNowMobileButton = () => (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      style={{ 
+        display: 'inline-block',
+        position: 'absolute',
+        right: '80px',
+        top: '50%',
+        transform: 'translateY(-50%)'
+      }}
+    >
+      <a
+        href="https://www.airbnb.com/users/show/502109503"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-decoration-none"
+      >
+        <div
+          className="d-flex align-items-center gap-2"
+          style={{
+            backgroundColor: '#ffe6d8',
+            border: '2px solid #ffe6d8',
+            color: '#824a39',
+            padding: '0.4rem 0.8rem',
+            borderRadius: '25px',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            transition: 'all 0.3s ease',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#824a39';
+            e.currentTarget.style.color = '#ffe6d8';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#ffe6d8';
+            e.currentTarget.style.color = '#824a39';
+          }}
+        >
+          <FaCalendarAlt size={16} />
+          Book Now
+        </div>
+      </a>
+    </motion.div>
+  );
+
   return (
     <Navbar 
       bg="custom" 
@@ -185,6 +270,8 @@ const Header = () => {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           />
         </Navbar.Brand>
+        
+        {isMobile && <BookNowMobileButton />}
         
         <Navbar.Toggle 
           aria-controls="navbar-nav" 
@@ -236,6 +323,10 @@ const Header = () => {
                       <NavButton to="/contact" icon={FaEnvelope} mobile>Contact Us</NavButton>
                     </motion.div>
 
+                    <motion.div variants={mobileNavLinkVariants}>
+                      <NavButton to="https://www.airbnb.com/users/show/502109503" icon={FaCalendarAlt} mobile external>Book Now</NavButton>
+                    </motion.div>
+
                     {user && (
                       <>
                         <motion.div variants={mobileNavLinkVariants}>
@@ -261,6 +352,7 @@ const Header = () => {
                   <NavButton to="/" icon={FaHome}>Home</NavButton>
                   <NavButton to="/about" icon={FaInfoCircle}>About Us</NavButton>
                   <NavButton to="/contact" icon={FaEnvelope}>Contact Us</NavButton>
+                  <NavButton to="https://www.airbnb.com/users/show/502109503" icon={FaCalendarAlt} external>Book Now</NavButton>
                   {user && (
                     <>
                       <NavButton to="/admin/dashboard" icon={FaChartBar}>Dashboard</NavButton>

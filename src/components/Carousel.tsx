@@ -69,6 +69,16 @@ const HomeCarousel = () => {
     setIndex(selectedIndex);
   };
 
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleSelect(index === 0 ? images.length - 1 : index - 1);
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleSelect(index === images.length - 1 ? 0 : index + 1);
+  };
+
   return (
     <div 
       className="position-relative mb-5"
@@ -88,6 +98,7 @@ const HomeCarousel = () => {
         interval={5000}
         className="carousel-custom"
         controls={false}
+        indicators={true}
       >
         {images.map((image, idx) => (
           <Carousel.Item key={idx}>
@@ -103,60 +114,28 @@ const HomeCarousel = () => {
             />
             <Carousel.Caption
               style={{
-                backgroundColor: 'rgba(130, 74, 57, 0.7)',
-                borderRadius: '8px',
                 padding: '15px',
-                backdropFilter: 'blur(4px)'
+                background: 'transparent',
+                pointerEvents: 'none'
               }}
             >
-              <h3>{image.caption}</h3>
+              <h3 className="caption-text">
+                {image.caption}
+              </h3>
             </Carousel.Caption>
           </Carousel.Item>
         ))}
       </Carousel>
 
-      {/* Custom Carousel Controls */}
-      {showControls && (
-        <>
-          <motion.button
-            className="carousel-control-btn prev"
-            onClick={() => handleSelect(index === 0 ? images.length - 1 : index - 1)}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ 
-              opacity: mouseX < window.innerWidth / 2 ? 1 : 0,
-              x: mouseX < window.innerWidth / 2 ? 0 : -20
-            }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ duration: 0.2 }}
-          >
-            <FaChevronLeft size={24} />
-          </motion.button>
-          <motion.button
-            className="carousel-control-btn next"
-            onClick={() => handleSelect(index === images.length - 1 ? 0 : index + 1)}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ 
-              opacity: mouseX >= window.innerWidth / 2 ? 1 : 0,
-              x: mouseX >= window.innerWidth / 2 ? 0 : 20
-            }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ duration: 0.2 }}
-          >
-            <FaChevronRight size={24} />
-          </motion.button>
-        </>
-      )}
-
+      {/* Airbnb Button - Positioned with absolute positioning */}
       {airbnbLink && (
         <div 
-          className="position-absolute top-50 start-50 translate-middle"
+          className="position-absolute start-50 translate-middle-x"
           style={{
-            opacity: isHovered ? 1 : 0,
-            visibility: isHovered ? 'visible' : 'hidden',
-            transition: 'all 0.3s ease',
-            zIndex: 10
+            zIndex: 10,
+            top: '80%',
+            pointerEvents: 'auto',
+            textAlign: 'center'
           }}
         >
           <motion.div
@@ -198,6 +177,40 @@ const HomeCarousel = () => {
         </div>
       )}
 
+      {/* Custom Carousel Controls */}
+      {showControls && (
+        <>
+          <motion.button
+            className="carousel-control-btn prev"
+            onClick={handlePrev}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ 
+              opacity: mouseX < window.innerWidth / 2 ? 1 : 0,
+              x: mouseX < window.innerWidth / 2 ? 0 : -20
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChevronLeft size={24} />
+          </motion.button>
+          <motion.button
+            className="carousel-control-btn next"
+            onClick={handleNext}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ 
+              opacity: mouseX >= window.innerWidth / 2 ? 1 : 0,
+              x: mouseX >= window.innerWidth / 2 ? 0 : 20
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaChevronRight size={24} />
+          </motion.button>
+        </>
+      )}
+
       <style>
         {`
           .carousel-custom {
@@ -211,6 +224,7 @@ const HomeCarousel = () => {
           .carousel-indicators {
             margin-bottom: 2rem;
             gap: 8px;
+            z-index: 20;
           }
 
           .carousel-indicators [data-bs-target] {
@@ -238,7 +252,7 @@ const HomeCarousel = () => {
 
           .carousel-control-btn {
             position: absolute;
-            top: 50%;
+            top: 40%;
             transform: translateY(-50%);
             background-color: rgba(255, 255, 255, 0.9);
             border: none;
@@ -251,7 +265,7 @@ const HomeCarousel = () => {
             cursor: pointer;
             color: #824a39;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 5;
+            z-index: 20;
           }
 
           .carousel-control-btn.prev {
@@ -261,19 +275,24 @@ const HomeCarousel = () => {
           .carousel-control-btn.next {
             right: 20px;
           }
-
+          
           .carousel-caption {
-            bottom: 2rem;
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            transition: all 0.3s ease;
+            bottom: 35% !important;
           }
 
-          .carousel-caption h3 {
+          .caption-text {
             margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 
+              -2px -2px 0 #824a39,
+              2px -2px 0 #824a39,
+              -2px 2px 0 #824a39,
+              2px 2px 0 #824a39,
+              0 0 8px rgba(130, 74, 57, 0.7);
+            letter-spacing: 1px;
           }
         `}
       </style>

@@ -5,11 +5,20 @@
   --background-color: #ffe6d8;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color);
   color: var(--primary-color);
+}
+
+section, .container {
+  scroll-snap-align: start;
+  scroll-margin-top: 80px;
 }
 
 a {
