@@ -13,6 +13,19 @@ import type { Booking, BookingSource, Property } from '../../types';
 const locales = { vi };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek: () => startOfWeek(new Date(), { locale: vi }), getDay, locales });
 
+const SOURCE_LABELS: Record<BookingSource, string> = {
+  airbnb: 'Airbnb',
+  booking: 'Booking.com',
+  agoda: 'Agoda',
+  direct: 'Trực tiếp',
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  confirmed: 'Đã xác nhận',
+  pending: 'Chờ xác nhận',
+  cancelled: 'Đã hủy',
+};
+
 const SOURCE_COLORS: Record<BookingSource, string> = {
   airbnb: '#e07a5f',
   booking: '#3d5a80',
@@ -86,9 +99,9 @@ const CalendarView = () => {
         <div className="card-body p-3">
           <div className="d-flex gap-3 mb-3 flex-wrap">
             {Object.entries(SOURCE_COLORS).map(([source, color]) => (
-              <div key={source} className="d-flex align-items-center gap-2 small text-capitalize">
+              <div key={source} className="d-flex align-items-center gap-2 small">
                 <span style={{ width: 12, height: 12, borderRadius: 3, background: color, display: 'inline-block' }} />
-                {source}
+                {SOURCE_LABELS[source as BookingSource]}
               </div>
             ))}
           </div>
@@ -116,11 +129,11 @@ const CalendarView = () => {
         {selected && (
           <Modal.Body>
             <p><strong>Khách:</strong> {selected.guestName}</p>
-            <p><strong>Room:</strong> {propertyName(selected.propertyId)}</p>
-            <p><strong>Kênh:</strong> {selected.source}</p>
+            <p><strong>Phòng:</strong> {propertyName(selected.propertyId)}</p>
+            <p><strong>Kênh:</strong> {SOURCE_LABELS[selected.source]}</p>
             <p><strong>Nhận phòng:</strong> {selected.checkIn}</p>
             <p><strong>Trả phòng:</strong> {selected.checkOut}</p>
-            <p><strong>Trạng thái:</strong> {selected.status}</p>
+            <p><strong>Trạng thái:</strong> {STATUS_LABELS[selected.status]}</p>
             <p className="mb-0"><strong>Thanh toán:</strong> {selected.payoutAmount.toLocaleString('vi-VN')} đ</p>
           </Modal.Body>
         )}

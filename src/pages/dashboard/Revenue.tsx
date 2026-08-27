@@ -7,6 +7,12 @@ import { auth } from '../../config/firebase';
 import { revenueService } from '../../services/revenueService';
 import type { RevenueEntry, RevenueEntryType } from '../../types';
 
+const TYPE_LABELS: Record<RevenueEntryType, string> = {
+  booking_payout: 'Thanh toán đặt phòng',
+  expense: 'Chi phí',
+  adjustment: 'Điều chỉnh',
+};
+
 const emptyForm = { type: 'booking_payout' as RevenueEntryType, amount: '', description: '', date: new Date().toISOString().slice(0, 10) };
 
 const Revenue = () => {
@@ -158,7 +164,7 @@ const Revenue = () => {
               {entries.map((e) => (
                 <tr key={e.id}>
                   <td>{e.date}</td>
-                  <td className="text-capitalize">{e.type.replace('_', ' ')}</td>
+                  <td>{TYPE_LABELS[e.type]}</td>
                   <td>{e.description}</td>
                   <td style={{ color: e.type === 'expense' ? 'var(--color-primary)' : 'inherit' }}>
                     {e.type === 'expense' ? '-' : ''}{e.amount.toLocaleString('vi-VN')} đ

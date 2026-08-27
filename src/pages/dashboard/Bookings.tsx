@@ -7,6 +7,19 @@ import { bookingService } from '../../services/bookingService';
 import { propertyService } from '../../services/propertyService';
 import type { Booking, BookingSource, BookingStatus, Property } from '../../types';
 
+const STATUS_LABELS: Record<BookingStatus, string> = {
+  confirmed: 'Đã xác nhận',
+  pending: 'Chờ xác nhận',
+  cancelled: 'Đã hủy',
+};
+
+const SOURCE_LABELS: Record<BookingSource, string> = {
+  airbnb: 'Airbnb',
+  booking: 'Booking.com',
+  agoda: 'Agoda',
+  direct: 'Trực tiếp',
+};
+
 const emptyForm = {
   propertyId: '',
   guestName: '',
@@ -168,7 +181,7 @@ const Bookings = () => {
             <thead>
               <tr>
                 <th>Khách</th>
-                <th>Room</th>
+                <th>Phòng</th>
                 <th>Kênh</th>
                 <th>Nhận phòng</th>
                 <th>Trả phòng</th>
@@ -182,10 +195,10 @@ const Bookings = () => {
                 <tr key={b.id}>
                   <td>{b.guestName}</td>
                   <td>{propertyName(b.propertyId)}</td>
-                  <td className="text-capitalize">{b.source}</td>
+                  <td>{SOURCE_LABELS[b.source]}</td>
                   <td>{b.checkIn}</td>
                   <td>{b.checkOut}</td>
-                  <td className="text-capitalize">{b.status}</td>
+                  <td>{STATUS_LABELS[b.status]}</td>
                   <td>{b.payoutAmount.toLocaleString('vi-VN')} đ</td>
                   <td className="d-flex gap-2">
                     <Button size="sm" variant="outline-primary" onClick={() => openEdit(b)}>Sửa</Button>
@@ -207,7 +220,7 @@ const Bookings = () => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-3">
-            <Form.Label>Room</Form.Label>
+            <Form.Label>Phòng</Form.Label>
             <Form.Select value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })}>
               <option value="">Chọn bất động sản</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}

@@ -10,23 +10,23 @@ import {
 const SERVICES = [
   {
     icon: FaPlaneArrival,
-    title: 'Đưa đón sân bay',
-    desc: 'Hỗ trợ đặt xe đưa đón từ sân bay Tân Sơn Nhất về tận nơi lưu trú, thuận tiện cho chuyến bay sớm hoặc khuya.',
+    title: 'Airport Transfer',
+    desc: 'Support booking a ride from Tan Son Nhat Airport straight to your accommodation, convenient for early or late flights.',
   },
   {
     icon: FaBroom,
-    title: 'Dọn phòng theo yêu cầu',
-    desc: 'Dịch vụ dọn phòng, thay ga giường, khăn tắm định kỳ hoặc theo yêu cầu trong suốt thời gian lưu trú dài ngày.',
+    title: 'On-Request Housekeeping',
+    desc: 'Housekeeping service, bed linen and towel changes on a regular or on-request basis throughout longer stays.',
   },
   {
     icon: FaMapMarkedAlt,
-    title: 'Tư vấn lịch trình & tour',
-    desc: 'Gợi ý địa điểm ăn uống, tham quan quanh khu vực trung tâm, hỗ trợ đặt tour trải nghiệm địa phương.',
+    title: 'Itinerary & Tour Advice',
+    desc: 'Recommendations for dining and sightseeing around the central area, plus support booking local experience tours.',
   },
   {
     icon: FaHeadset,
-    title: 'Hỗ trợ 24/7',
-    desc: 'Đội ngũ hỗ trợ luôn sẵn sàng qua điện thoại/Zalo/WhatsApp trong suốt thời gian bạn lưu trú tại MaokiHouse.',
+    title: '24/7 Support',
+    desc: 'Our support team is always available via phone/Zalo/WhatsApp throughout your stay at MaokiHouse.',
   },
 ];
 
@@ -40,13 +40,13 @@ const Services = () => {
         transition={{ duration: 0.7 }}
         className="text-center my-5"
       >
-        <div className="eyebrow">Dịch vụ</div>
+        <div className="eyebrow">Services</div>
         <h1 className="font-display mb-0" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-          Dịch vụ đi kèm cho kỳ nghỉ trọn vẹn
+          Extra services for a complete stay
         </h1>
         <div className="gold-divider"><i className="bi bi-heart gold-divider-icon"></i></div>
         <p className="mx-auto mt-3" style={{ maxWidth: 640, color: 'var(--color-ink)', opacity: 0.8 }}>
-          Ngoài phòng ở thoải mái, MaokiHouse còn hỗ trợ thêm những dịch vụ nhỏ để chuyến đi của bạn dễ dàng hơn.
+          Beyond a comfortable room, MaokiHouse also offers a few extra services to make your trip easier.
         </p>
       </motion.div>
 
@@ -73,10 +73,10 @@ const Services = () => {
 
       <div className="text-center my-5 py-4">
         <h3 className="font-display mb-3" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
-          Cần hỗ trợ thêm cho chuyến đi của bạn?
+          Need more support for your trip?
         </h3>
         <Link to="/contact" className="pill-btn">
-          Liên hệ với chúng tôi <i className="bi bi-arrow-right"></i>
+          Contact Us <i className="bi bi-arrow-right"></i>
         </Link>
       </div>
     </div>

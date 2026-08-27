@@ -25,13 +25,13 @@ const Pricing = () => {
         transition={{ duration: 0.7 }}
         className="text-center my-5"
       >
-        <div className="eyebrow">Bảng giá</div>
+        <div className="eyebrow">Pricing</div>
         <h1 className="font-display mb-0" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-          Giá phòng minh bạch, không phụ phí ẩn
+          Transparent room rates, no hidden fees
         </h1>
         <div className="gold-divider"><i className="bi bi-tag gold-divider-icon"></i></div>
         <p className="mx-auto mt-3" style={{ maxWidth: 640, color: 'var(--color-ink)', opacity: 0.8 }}>
-          Giá có thể thay đổi theo mùa và số đêm lưu trú. Liên hệ trực tiếp để nhận báo giá tốt nhất cho chuyến đi của bạn.
+          Prices may vary by season and length of stay. Contact us directly to get the best quote for your trip.
         </p>
       </motion.div>
 
@@ -42,7 +42,7 @@ const Pricing = () => {
           </div>
         </div>
       ) : homestays.length === 0 ? (
-        <p className="text-center text-muted py-5">Hiện chưa có căn hộ nào được cập nhật giá.</p>
+        <p className="text-center text-muted py-5">No properties with pricing available at the moment.</p>
       ) : (
         <div className="row g-4 mb-5">
           {homestays.map((h, i) => (
@@ -63,11 +63,11 @@ const Pricing = () => {
                 <div className="card-body p-4 d-flex flex-column flex-grow-1">
                   <h3 className="h5 mb-2">{h.title}</h3>
                   <div className="mb-3" style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--color-primary-dark)' }}>
-                    {h.price.toLocaleString('vi-VN')}đ <span className="fs-6 text-muted fw-normal">/ đêm</span>
+                    {h.price.toLocaleString('en-US')}₫ <span className="fs-6 text-muted fw-normal">/ night</span>
                   </div>
                   <p className="text-muted small flex-grow-1">{h.description}</p>
                   <Link to={`/detail/${h.id}`} className="pill-btn mt-2 align-self-start">
-                    Xem chi tiết
+                    View Details
                   </Link>
                 </div>
               </div>
@@ -78,10 +78,10 @@ const Pricing = () => {
 
       <div className="text-center my-5 py-4">
         <h3 className="font-display mb-3" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
-          Cần tư vấn thêm về giá và lịch trống?
+          Need more info on pricing and availability?
         </h3>
         <Link to="/contact" className="pill-btn">
-          Liên hệ với chúng tôi <i className="bi bi-arrow-right"></i>
+          Contact Us <i className="bi bi-arrow-right"></i>
         </Link>
       </div>
     </div>

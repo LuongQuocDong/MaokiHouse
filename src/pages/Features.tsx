@@ -11,14 +11,14 @@ import {
 } from 'react-icons/fa';
 
 const AMENITIES = [
-  { icon: FaWifi, title: 'Wifi tốc độ cao', desc: 'Kết nối ổn định, phù hợp làm việc từ xa hoặc giải trí xuyên suốt kỳ nghỉ.' },
-  { icon: FaSnowflake, title: 'Máy lạnh', desc: 'Điều hòa riêng cho từng phòng, giữ không gian mát mẻ quanh năm.' },
-  { icon: FaShower, title: 'Phòng tắm riêng', desc: 'Phòng tắm nóng lạnh sạch sẽ, đầy đủ tiện nghi cơ bản.' },
-  { icon: FaUtensils, title: 'Bếp đầy đủ tiện nghi', desc: 'Không gian bếp trang bị tủ lạnh, bếp từ, dụng cụ nấu ăn cơ bản.' },
-  { icon: FaTshirt, title: 'Máy giặt trong tòa nhà', desc: 'Tiện lợi cho những chuyến ở dài ngày, không cần tìm tiệm giặt ủi.' },
-  { icon: FaShieldAlt, title: 'An ninh 24/7', desc: 'Hệ thống bảo vệ, camera giám sát, khóa cửa an toàn cho khách lưu trú.' },
-  { icon: FaMapMarkerAlt, title: 'Vị trí trung tâm', desc: 'Gần chợ Bến Thành, nhiều nhà hàng, quán cà phê và spa xung quanh.' },
-  { icon: FaParking, title: 'Hỗ trợ gửi xe', desc: 'Có khu vực/gợi ý gửi xe máy, ô tô gần khu vực lưu trú.' },
+  { icon: FaWifi, title: 'High-Speed Wifi', desc: 'Stable connection, great for remote work or entertainment throughout your stay.' },
+  { icon: FaSnowflake, title: 'Air Conditioning', desc: 'Individual air conditioning in every room, keeping the space cool year-round.' },
+  { icon: FaShower, title: 'Private Bathroom', desc: 'Clean hot and cold bathroom with all the basic amenities.' },
+  { icon: FaUtensils, title: 'Fully Equipped Kitchen', desc: 'Kitchen space equipped with a refrigerator, induction stove, and basic cooking utensils.' },
+  { icon: FaTshirt, title: 'In-Building Laundry', desc: 'Convenient for longer stays, no need to search for a laundromat.' },
+  { icon: FaShieldAlt, title: '24/7 Security', desc: 'Security system, surveillance cameras, and safe door locks for guests.' },
+  { icon: FaMapMarkerAlt, title: 'Central Location', desc: 'Close to Ben Thanh Market, with plenty of restaurants, cafes, and spas nearby.' },
+  { icon: FaParking, title: 'Parking Support', desc: 'Parking areas/recommendations for motorbikes and cars near the property.' },
 ];
 
 const Features = () => {
@@ -31,13 +31,13 @@ const Features = () => {
         transition={{ duration: 0.7 }}
         className="text-center my-5"
       >
-        <div className="eyebrow">Tiện nghi</div>
+        <div className="eyebrow">Amenities</div>
         <h1 className="font-display mb-0" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-          Mọi tiện nghi bạn cần cho một kỳ nghỉ thoải mái
+          Everything you need for a comfortable stay
         </h1>
         <div className="gold-divider"><i className="bi bi-stars gold-divider-icon"></i></div>
         <p className="mx-auto mt-3" style={{ maxWidth: 640, color: 'var(--color-ink)', opacity: 0.8 }}>
-          MaokiHouse chú trọng từng chi tiết nhỏ để bạn cảm thấy như đang ở nhà, ngay giữa lòng Sài Gòn.
+          MaokiHouse pays attention to every little detail so you feel right at home, in the heart of Saigon.
         </p>
       </motion.div>
 

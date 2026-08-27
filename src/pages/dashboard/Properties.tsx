@@ -120,7 +120,7 @@ const Properties = () => {
     <div>
       <div className="mb-4">
         <div className="eyebrow">Quản lý</div>
-        <h1 className="font-display" style={{ fontSize: '1.9rem' }}>Room</h1>
+        <h1 className="font-display" style={{ fontSize: '1.9rem' }}>Phòng</h1>
       </div>
 
       <div className="elevated-card mb-4">

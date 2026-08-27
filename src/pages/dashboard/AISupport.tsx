@@ -10,7 +10,7 @@ const AISupport = () => {
     <div>
       <div className="mb-4">
         <div className="eyebrow">Sắp ra mắt</div>
-        <h1 className="font-display" style={{ fontSize: '1.9rem' }}>AI Support</h1>
+        <h1 className="font-display" style={{ fontSize: '1.9rem' }}>Hỗ trợ AI</h1>
       </div>
 
       <div className="elevated-card">

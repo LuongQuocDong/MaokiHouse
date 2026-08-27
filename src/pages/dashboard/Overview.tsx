@@ -71,7 +71,7 @@ const Overview = () => {
   });
 
   const kpis = [
-    { label: 'Rooms', value: properties.length },
+    { label: 'Phòng', value: properties.length },
     { label: 'Đặt phòng sắp tới', value: upcomingBookings.length },
     { label: 'Doanh thu tháng này', value: thisMonthRevenue.toLocaleString('vi-VN') + ' đ' },
   ];

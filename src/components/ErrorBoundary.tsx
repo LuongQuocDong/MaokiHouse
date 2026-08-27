@@ -28,11 +28,11 @@ class ErrorBoundary extends Component<Props, State> {
           style={{ minHeight: '60vh' }}
         >
           <h2 className="font-display mb-3" style={{ color: 'var(--color-ink)' }}>
-            Đã có lỗi xảy ra
+            Something went wrong
           </h2>
-          <p className="text-muted mb-4">Vui lòng tải lại trang. Nếu lỗi vẫn tiếp diễn, hãy liên hệ quản trị viên.</p>
+          <p className="text-muted mb-4">Please reload the page. If the problem persists, contact the administrator.</p>
           <button type="button" className="pill-btn" onClick={() => window.location.reload()}>
-            Tải lại trang
+            Reload Page
           </button>
         </div>
       );

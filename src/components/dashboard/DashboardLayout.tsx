@@ -20,15 +20,15 @@ import {
 import { BiLogOut } from 'react-icons/bi';
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', label: 'Overview', icon: FaChartLine, end: true },
-  { to: '/admin/dashboard/properties', label: 'Rooms', icon: FaHome },
-  { to: '/admin/dashboard/bookings', label: 'Bookings', icon: FaCalendarCheck },
-  { to: '/admin/dashboard/calendar', label: 'Calendar', icon: FaCalendarAlt },
-  { to: '/admin/dashboard/messages', label: 'Messages', icon: FaEnvelope },
-  { to: '/admin/dashboard/revenue', label: 'Revenue', icon: FaMoneyBillWave },
-  { to: '/admin/dashboard/hr', label: 'HR', icon: FaUsers },
-  { to: '/admin/dashboard/ai-support', label: 'AI Support', icon: FaRobot },
-  { to: '/admin/dashboard/channels', label: 'Channels', icon: FaPlug },
+  { to: '/admin/dashboard', label: 'Tổng quan', icon: FaChartLine, end: true },
+  { to: '/admin/dashboard/properties', label: 'Phòng', icon: FaHome },
+  { to: '/admin/dashboard/bookings', label: 'Đặt phòng', icon: FaCalendarCheck },
+  { to: '/admin/dashboard/calendar', label: 'Lịch', icon: FaCalendarAlt },
+  { to: '/admin/dashboard/messages', label: 'Tin nhắn', icon: FaEnvelope },
+  { to: '/admin/dashboard/revenue', label: 'Doanh thu', icon: FaMoneyBillWave },
+  { to: '/admin/dashboard/hr', label: 'Nhân sự', icon: FaUsers },
+  { to: '/admin/dashboard/ai-support', label: 'Hỗ trợ AI', icon: FaRobot },
+  { to: '/admin/dashboard/channels', label: 'Kênh kết nối', icon: FaPlug },
 ];
 
 const DashboardLayout = () => {
@@ -65,7 +65,7 @@ const DashboardLayout = () => {
 
       <div className="dashboard-main">
         <header className="dashboard-topbar">
-          <div className="dashboard-topbar-title">Host Dashboard</div>
+          <div className="dashboard-topbar-title">Bảng điều khiển</div>
           <div className="dashboard-topbar-user">
             <span className="dashboard-user-email">{user?.email}</span>
             <button type="button" className="dashboard-logout-btn" onClick={handleLogout}>
