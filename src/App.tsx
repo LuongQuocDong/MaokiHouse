@@ -13,12 +13,19 @@ import * as Pages from './pages';
 
 const AppRoutes = () => {
   const location = useLocation();
+  // Dashboard sub-pages share a layout (sidebar/topbar) that must stay
+  // mounted across nested navigation — keying by the full pathname would
+  // remount it (and re-run its auth check) on every sidebar click, which
+  // is what caused "have to click/reload a few times before it shows".
+  const routeKey = location.pathname.startsWith('/admin/dashboard')
+    ? '/admin/dashboard'
+    : location.pathname;
 
   return (
     <AnimatePresence mode="wait">
       <Suspense fallback={<LoadingSpinner />}>
         <PageTransition>
-          <Routes location={location} key={location.pathname}>
+          <Routes location={location} key={routeKey}>
             <Route path="/" element={<Pages.Home />} />
             <Route path="/about" element={<Pages.AboutUs />} />
             <Route path="/features" element={<Pages.Features />} />
