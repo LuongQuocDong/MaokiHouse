@@ -3,6 +3,15 @@
   --primary-dark: #6b3d2f;
   --primary-light: #fdf2e9;
   --background-color: #ffe6d8;
+
+  /* Brand palette (formerly duplicated in tailwind.config.js, which was
+     never wired up to the build — Tailwind isn't installed). These are
+     aliases of the vars above, kept under the --color-* naming used by
+     newer components. */
+  --color-primary: var(--primary-color);
+  --color-primary-dark: var(--primary-dark);
+  --color-background: var(--background-color);
+  --color-logo-light: var(--primary-light);
 }
 
 html {

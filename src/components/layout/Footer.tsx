@@ -1,4 +1,5 @@
 import { FaFacebook, FaWhatsapp, FaEnvelope, FaHome } from 'react-icons/fa';
+import { CONTACT_LINKS } from '../../constants/contact';
 
 const Footer = () => {
   return (
@@ -13,7 +14,7 @@ const Footer = () => {
         <div className="row">
           <div className="col-md-4">
             <img
-              src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752678018/logo_skiner.png"
+              src={CONTACT_LINKS.logoURL}
               alt="Maoki House"
               style={{ width: '150px' }}
             />
@@ -23,37 +24,37 @@ const Footer = () => {
           <div className="col-md-4">
             <h5 className="mb-3">Contact Us</h5>
             <div className="d-flex flex-column">
-              <a 
-                href="https://www.facebook.com/p/Maoki-House-100090585424824/" 
-                target="_blank" 
+              <a
+                href={CONTACT_LINKS.facebook}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="mb-2 text-decoration-none"
                 style={{ color: '#fdf2e9' }}
               >
                 <FaFacebook className="me-2" /> Our Facebook Page
               </a>
-              
-              <a 
-                href="https://wa.me/84868191581" 
-                target="_blank" 
+
+              <a
+                href={CONTACT_LINKS.whatsapp}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="mb-2 text-decoration-none"
                 style={{ color: '#fdf2e9' }}
               >
-                <FaWhatsapp className="me-2" /> +84868191581 (Whatsapp)
+                <FaWhatsapp className="me-2" /> {CONTACT_LINKS.whatsappDisplay}
               </a>
-              
-              <a 
-                href="mailto:maokihouse.sg@gmail.com"
+
+              <a
+                href={CONTACT_LINKS.emailHref}
                 className="mb-2 text-decoration-none"
                 style={{ color: '#fdf2e9' }}
               >
-                <FaEnvelope className="me-2" /> maokihouse.sg@gmail.com
+                <FaEnvelope className="me-2" /> {CONTACT_LINKS.email}
               </a>
-              
-              <a 
-                href="https://www.airbnb.com/users/show/502109503" 
-                target="_blank" 
+
+              <a
+                href={CONTACT_LINKS.airbnb}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="mb-2 text-decoration-none"
                 style={{ color: '#fdf2e9' }}

@@ -43,6 +43,16 @@ export interface AboutUsContent {
   updatedBy?: string;
 }
 
+export interface ContactContent {
+  id: string;
+  content: string;
+  title: string;
+  subtitle: string;
+  imageURL?: string;
+  updatedAt?: number;
+  updatedBy?: string;
+}
+
 export interface User {
   uid: string;
   email: string;

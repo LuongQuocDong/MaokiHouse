@@ -1,10 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { ref, get, set } from 'firebase/database';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { database, auth } from '../config/firebase';
+import { auth } from '../config/firebase';
+import { contentService } from '../services/contentService';
 import type { WelcomeContent } from '../types';
+
+const HIGHLIGHTED_PHRASE = 'free walking street tours';
+
+/** Splits `text` on `phrase` and renders the phrase as a highlighted span,
+ * without resorting to dangerouslySetInnerHTML. */
+const renderHighlighted = (text: string, phrase: string) => {
+  if (!phrase) return text;
+  const parts = text.split(phrase);
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {part}
+      {i < parts.length - 1 && <span style={{ color: '#dc3545' }}>{phrase}</span>}
+    </Fragment>
+  ));
+};
 
 const Welcome = () => {
   const [user] = useAuthState(auth);
@@ -16,12 +31,10 @@ const Welcome = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const contentRef = ref(database, 'welcome/default');
-        const snapshot = await get(contentRef);
-        
-        if (snapshot.exists()) {
-          setContent(snapshot.val());
-          setEditedContent(snapshot.val().content);
+        const data = await contentService.getWelcome();
+        if (data) {
+          setContent(data);
+          setEditedContent(data.content);
         } else {
           // Initialize with default content if none exists
           const defaultContent: WelcomeContent = {
@@ -31,9 +44,13 @@ const Welcome = () => {
             subtitle: 'We love wandering around, talking, sharing things about our lovely Saigon.',
             updatedAt: Date.now(),
           };
-          await set(ref(database, 'welcome/default'), defaultContent);
           setContent(defaultContent);
           setEditedContent(defaultContent.content);
+          // Seed the backend so future loads have content, but only if we have a token.
+          if (user) {
+            const idToken = await user.getIdToken();
+            await contentService.put(idToken, 'welcome', defaultContent);
+          }
         }
       } catch (error) {
         console.error('Error fetching welcome content:', error);
@@ -43,12 +60,14 @@ const Welcome = () => {
     };
 
     fetchContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSave = async () => {
     if (!user) return;
-    
+
     try {
+      const idToken = await user.getIdToken();
       const updatedContent: WelcomeContent = {
         id: 'default',
         content: editedContent,
@@ -57,8 +76,8 @@ const Welcome = () => {
         updatedAt: Date.now(),
         updatedBy: user.uid
       };
-      await set(ref(database, 'welcome/default'), updatedContent);
-      setContent(updatedContent);
+      const saved = await contentService.put(idToken, 'welcome', updatedContent);
+      setContent(saved);
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving welcome content:', error);
@@ -78,13 +97,6 @@ const Welcome = () => {
   if (!content) {
     return null;
   }
-
-  const renderContent = (text: string) => {
-    return text.replace(
-      'free walking street tours',
-      '<span style="color: #dc3545">free walking street tours</span>'
-    );
-  };
 
   return (
     <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: '#ffe6d8' }}>
@@ -117,18 +129,19 @@ const Welcome = () => {
             <div className="mb-4" style={{ color: '#ffa500', fontSize: '1.2rem' }}>
               {content.subtitle}
             </div>
-            <div 
-              className="mb-4 mx-auto" 
-              style={{ 
+            <div
+              className="mb-4 mx-auto"
+              style={{
                 maxWidth: '800px',
                 fontSize: '1.1rem',
                 lineHeight: '1.8',
                 color: '#666'
               }}
-              dangerouslySetInnerHTML={{ __html: renderContent(content.content) }}
-            />
+            >
+              {renderHighlighted(content.content, HIGHLIGHTED_PHRASE)}
+            </div>
             <div className="d-flex justify-content-center mt-5">
-              <Link 
+              <Link
                 to="/about"
                 className="btn btn-outline-danger px-4 py-2"
                 style={{
@@ -157,4 +170,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome; 
+export default Welcome;

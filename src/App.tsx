@@ -42,7 +42,7 @@ const AppRoutes = () => {
 function App() {
   return (
     <Router>
-      <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: '#ffe6d8' }}>
+      <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: 'var(--color-background)' }}>
         <Toaster position="top-right" />
         <Header />
         <main className="flex-grow-1 py-4">

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
 import { Form, Button, Container, Image, InputGroup } from 'react-bootstrap';
 import { auth } from '../../config/firebase';
+import { authService } from '../../services/authService';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaSignInAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
@@ -34,7 +35,17 @@ const Login = () => {
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await credential.user.getIdToken();
+
+      const result = await authService.verify(idToken);
+      if (!result.admin) {
+        await signOut(auth);
+        setError('This account does not have admin access.');
+        setLoading(false);
+        return;
+      }
+
       toast.success('Login successful!');
       navigate('/admin/dashboard');
     } catch (error: any) {

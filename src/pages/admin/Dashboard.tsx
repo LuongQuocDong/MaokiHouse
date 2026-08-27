@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { ref, push, set, get, remove, update } from 'firebase/database';
-import { signInAnonymously } from 'firebase/auth';
 import toast from 'react-hot-toast';
 import { Form, Button, Card, Container, Row, Col, Spinner } from 'react-bootstrap';
-import { database, auth } from '../../config/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebase';
+import { homestayService } from '../../services/homestayService';
+import { uploadService } from '../../services/uploadService';
 import type { Homestay } from '../../types';
 
 interface HomestayFormData {
@@ -15,10 +16,6 @@ interface HomestayFormData {
   images: File[];
 }
 
-interface HomestayData extends Omit<Homestay, 'id'> {
-  timestamp: number;
-}
-
 const initialFormData: HomestayFormData = {
   title: '',
   description: '',
@@ -28,11 +25,8 @@ const initialFormData: HomestayFormData = {
   images: [],
 };
 
-// Cloudinary configuration
-const CLOUDINARY_CLOUD_NAME = 'dlkejgkqk';
-const CLOUDINARY_UPLOAD_PRESET = 'maokihouse';
-
 const Dashboard = () => {
+  const [user] = useAuthState(auth);
   const [homestays, setHomestays] = useState<Homestay[]>([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<HomestayFormData>(initialFormData);
@@ -40,38 +34,13 @@ const Dashboard = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        // Sign in anonymously if no user is logged in
-        if (!auth.currentUser) {
-          await signInAnonymously(auth);
-        }
-      } catch (error) {
-        console.error('Auth error:', error);
-      }
-    };
-
-    initializeAuth();
     fetchHomestays();
   }, []);
 
   const fetchHomestays = async () => {
     try {
-      const homestaysRef = ref(database, 'homestays');
-      const snapshot = await get(homestaysRef);
-      
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const homestayList = Object.entries(data)
-          .map(([id, value]) => ({
-            id,
-            ...(value as HomestayData)
-          }))
-          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0)); // Sort by newest first
-        setHomestays(homestayList);
-      } else {
-        setHomestays([]);
-      }
+      const homestayList = await homestayService.list();
+      setHomestays(homestayList);
     } catch (error) {
       console.error('Error fetching homestays:', error);
       toast.error('Failed to load homestays. Please refresh the page.');
@@ -90,52 +59,24 @@ const Dashboard = () => {
     setFormData(prev => ({ ...prev, images: files }));
   };
 
-  const uploadImagesToCloudinary = async (files: File[]): Promise<string[]> => {
-    const uploadPromises = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-      formData.append('folder', 'maoki-house/homestays');
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const data = await response.json();
-      return data.secure_url;
-    });
-
-    return Promise.all(uploadPromises);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error('You must be signed in as an admin to do this.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
-      // Ensure we have a user
-      if (!auth.currentUser) {
-        await signInAnonymously(auth);
-      }
-
-      // Check again after sign in attempt
-      if (!auth.currentUser) {
-        throw new Error('Failed to authenticate. Please try again.');
-      }
+      const idToken = await user.getIdToken();
 
       let imageURLs: string[] = [];
       if (formData.images.length > 0) {
         try {
           toast.loading('Uploading images...', { id: 'imageUpload' });
-          imageURLs = await uploadImagesToCloudinary(formData.images);
+          imageURLs = await uploadService.uploadImages(idToken, formData.images, 'maoki-house/homestays');
           toast.success('Images uploaded successfully', { id: 'imageUpload' });
         } catch (error) {
           console.error('Image upload error:', error);
@@ -146,26 +87,23 @@ const Dashboard = () => {
       }
 
       toast.loading('Saving homestay...', { id: 'saveHomestay' });
+
+      const existing = editingId ? homestays.find(h => h.id === editingId) : undefined;
       const homestayData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         price: parseFloat(formData.price),
         airbnbLink: formData.airbnbLink.trim(),
         phone: formData.phone.trim(),
-        timestamp: Date.now(),
-        imageURLs: imageURLs.length > 0 ? imageURLs : (editingId ? homestays.find(h => h.id === editingId)?.imageURLs : []),
-        mainImageURL: imageURLs.length > 0 ? imageURLs[0] : (editingId ? homestays.find(h => h.id === editingId)?.mainImageURL : ''),
-        updatedAt: Date.now(),
-        updatedBy: auth.currentUser.uid
+        imageURLs: imageURLs.length > 0 ? imageURLs : (existing?.imageURLs ?? []),
+        mainImageURL: imageURLs.length > 0 ? imageURLs[0] : (existing?.mainImageURL ?? ''),
       };
 
       if (editingId) {
-        const updateRef = ref(database, `homestays/${editingId}`);
-        await update(updateRef, homestayData);
+        await homestayService.update(idToken, editingId, homestayData);
         toast.success('Homestay updated successfully', { id: 'saveHomestay' });
       } else {
-        const newHomestayRef = push(ref(database, 'homestays'));
-        await set(newHomestayRef, homestayData);
+        await homestayService.create(idToken, homestayData);
         toast.success('Homestay created successfully', { id: 'saveHomestay' });
       }
 
@@ -193,11 +131,12 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (homestay: Homestay) => {
+    if (!user) return;
     if (!window.confirm('Are you sure you want to delete this homestay?')) return;
 
     try {
-      const homestayRef = ref(database, `homestays/${homestay.id}`);
-      await remove(homestayRef);
+      const idToken = await user.getIdToken();
+      await homestayService.remove(idToken, homestay.id);
       toast.success('Homestay deleted successfully');
       fetchHomestays();
     } catch (error) {
@@ -217,7 +156,7 @@ const Dashboard = () => {
   return (
     <Container className="py-5">
       <h1 className="mb-4">Manage Homestays</h1>
-      
+
       <Card className="mb-5">
         <Card.Body>
           <Form onSubmit={handleSubmit}>
@@ -367,4 +306,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

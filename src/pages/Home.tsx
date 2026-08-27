@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ref, get, query, orderByChild } from 'firebase/database';
-import { database } from '../config/firebase';
+import { homestayService } from '../services/homestayService';
 import type { Homestay } from '../types';
 import HomeCarousel from '../components/Carousel';
 import Welcome from '../components/Welcome';
@@ -42,23 +41,9 @@ const Home = () => {
   useEffect(() => {
     const fetchHomestays = async () => {
       try {
-        const homestaysRef = ref(database, 'homestays');
-        const homestaysQuery = query(homestaysRef, orderByChild('timestamp'));
-        const snapshot = await get(homestaysQuery);
-        
-        if (snapshot.exists()) {
-          const homestayData: Homestay[] = [];
-          snapshot.forEach((childSnapshot) => {
-            homestayData.push({
-              id: childSnapshot.key as string,
-              ...childSnapshot.val()
-            } as Homestay);
-          });
-          homestayData.sort((a, b) => b.timestamp - a.timestamp);
-          setHomestays(homestayData);
-        } else {
-          setHomestays([]);
-        }
+        const homestayData = await homestayService.list();
+        homestayData.sort((a, b) => b.timestamp - a.timestamp);
+        setHomestays(homestayData);
         setError(null);
       } catch (error) {
         console.error('Error fetching homestays:', error);

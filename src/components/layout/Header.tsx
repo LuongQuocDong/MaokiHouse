@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
 import { auth } from '../../config/firebase';
+import { CONTACT_LINKS } from '../../constants/contact';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiLogOut } from 'react-icons/bi';
@@ -89,28 +90,7 @@ const Header = () => {
           onClick={() => mobile && setExpanded(false)}
           className="text-decoration-none"
         >
-          <div
-            className="d-flex align-items-center gap-2"
-            style={{
-              backgroundColor: '#ffe6d8',
-              border: '2px solid #ffe6d8',
-              color: '#824a39',
-              padding: '0.5rem 1rem',
-              borderRadius: '25px',
-              fontSize: '1.1rem',
-              fontWeight: '500',
-              transition: 'all 0.3s ease',
-              whiteSpace: 'nowrap'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#824a39';
-              e.currentTarget.style.color = '#ffe6d8';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#ffe6d8';
-              e.currentTarget.style.color = '#824a39';
-            }}
-          >
+          <div className="header-nav-pill header-nav-pill-solid">
             <Icon size={20} />
             {children}
           </div>
@@ -122,28 +102,7 @@ const Header = () => {
           className="text-decoration-none"
         >
           <div
-            className="d-flex align-items-center gap-2"
-            style={{
-              backgroundColor: location.pathname === to ? '#ffe6d8' : 'transparent',
-              border: '2px solid #ffe6d8',
-              color: location.pathname === to ? '#824a39' : '#ffe6d8',
-              padding: '0.5rem 1rem',
-              borderRadius: '25px',
-              fontSize: '1.1rem',
-              fontWeight: '500',
-              transition: 'all 0.3s ease',
-              whiteSpace: 'nowrap'
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== to) {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 230, 216, 0.1)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== to) {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }
-            }}
+            className={`header-nav-pill ${location.pathname === to ? 'header-nav-pill-active' : 'header-nav-pill-outline'}`}
           >
             <Icon size={20} />
             {children}
@@ -160,29 +119,13 @@ const Header = () => {
       style={{ display: 'inline-block' }}
     >
       <Button
+        variant="light"
         onClick={() => {
           handleLogout();
           if (mobile) setExpanded(false);
         }}
-        className="d-flex align-items-center gap-2"
-        style={{
-          backgroundColor: '#ffe6d8',
-          border: '2px solid #ffe6d8',
-          color: '#824a39',
-          padding: '0.5rem 1rem',
-          borderRadius: '25px',
-          fontSize: '1.1rem',
-          fontWeight: '500',
-          transition: 'all 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#824a39';
-          e.currentTarget.style.color = '#ffe6d8';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#ffe6d8';
-          e.currentTarget.style.color = '#824a39';
-        }}
+        className="d-flex align-items-center gap-2 header-nav-pill header-nav-pill-solid"
+        style={{ border: '2px solid #ffe6d8' }}
       >
         <BiLogOut size={20} />
         Logout
@@ -195,7 +138,7 @@ const Header = () => {
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      style={{ 
+      style={{
         display: expanded ? 'none' : 'inline-block', // Hide when menu is expanded
         position: 'absolute',
         right: '75px',
@@ -205,33 +148,12 @@ const Header = () => {
       }}
     >
       <a
-        href="https://www.airbnb.com/users/show/502109503"
+        href={CONTACT_LINKS.airbnb}
         target="_blank"
         rel="noopener noreferrer"
         className="text-decoration-none"
       >
-        <div
-          className="d-flex align-items-center gap-2"
-          style={{
-            backgroundColor: '#ffe6d8',
-            border: '2px solid #ffe6d8',
-            color: '#824a39',
-            padding: '0.4rem 0.8rem',
-            borderRadius: '25px',
-            fontSize: '0.9rem',
-            fontWeight: '500',
-            transition: 'all 0.3s ease',
-            whiteSpace: 'nowrap'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#824a39';
-            e.currentTarget.style.color = '#ffe6d8';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#ffe6d8';
-            e.currentTarget.style.color = '#824a39';
-          }}
-        >
+        <div className="header-nav-pill header-nav-pill-solid header-nav-pill-small">
           <FaCalendarAlt size={16} />
           Book Now
         </div>
@@ -240,14 +162,14 @@ const Header = () => {
   );
 
   return (
-    <Navbar 
-      bg="custom" 
-      expand="lg" 
+    <Navbar
+      bg="custom"
+      expand="lg"
       expanded={expanded}
       onToggle={(expanded) => setExpanded(expanded)}
       className="navbar-custom"
-      style={{ 
-        backgroundColor: '#824a39',
+      style={{
+        backgroundColor: 'var(--color-primary)',
         marginBottom: '2rem'
       }}
       as={motion.nav}
@@ -256,27 +178,27 @@ const Header = () => {
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
       <Container className="position-relative"> {/* Added position-relative for absolute positioning context */}
-        <Navbar.Brand 
-          as={Link} 
+        <Navbar.Brand
+          as={Link}
           to="/"
           onClick={() => setExpanded(false)}
           className="p-0"
         >
-          <motion.img 
-            src="https://res.cloudinary.com/dlkejgkqk/image/upload/v1752678018/logo_skiner.png" 
-            alt="Maoki House" 
-            style={{ width: '150px' }} 
+          <motion.img
+            src={CONTACT_LINKS.logoURL}
+            alt="Maoki House"
+            style={{ width: '150px' }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           />
         </Navbar.Brand>
-        
+
         {isMobile && <BookNowMobileButton />}
-        
-        <Navbar.Toggle 
-          aria-controls="navbar-nav" 
-          style={{ 
+
+        <Navbar.Toggle
+          aria-controls="navbar-nav"
+          style={{
             border: 'none',
             padding: '0.25rem'
           }}
@@ -284,9 +206,9 @@ const Header = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <motion.span 
-            className="navbar-toggler-icon" 
-            style={{ 
+          <motion.span
+            className="navbar-toggler-icon"
+            style={{
               backgroundImage: `url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(253, 242, 233, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`
             }}
             animate={expanded ? { rotate: 90 } : { rotate: 0 }}
@@ -325,7 +247,7 @@ const Header = () => {
                     </motion.div>
 
                     <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="https://www.airbnb.com/users/show/502109503" icon={FaCalendarAlt} mobile external>Book Now</NavButton>
+                      <NavButton to={CONTACT_LINKS.airbnb} icon={FaCalendarAlt} mobile external>Book Now</NavButton>
                     </motion.div>
 
                     {user && (
@@ -353,7 +275,7 @@ const Header = () => {
                   <NavButton to="/" icon={FaHome}>Home</NavButton>
                   <NavButton to="/about" icon={FaInfoCircle}>About Us</NavButton>
                   <NavButton to="/contact" icon={FaEnvelope}>Contact Us</NavButton>
-                  <NavButton to="https://www.airbnb.com/users/show/502109503" icon={FaCalendarAlt} external>Book Now</NavButton>
+                  <NavButton to={CONTACT_LINKS.airbnb} icon={FaCalendarAlt} external>Book Now</NavButton>
                   {user && (
                     <>
                       <NavButton to="/admin/dashboard" icon={FaChartBar}>Dashboard</NavButton>
@@ -366,8 +288,54 @@ const Header = () => {
           </Nav>
         </Navbar.Collapse>
       </Container>
+
+      <style>
+        {`
+          .header-nav-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid #ffe6d8;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+          }
+
+          .header-nav-pill-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+          }
+
+          .header-nav-pill-solid {
+            background-color: #ffe6d8;
+            color: var(--color-primary);
+          }
+
+          .header-nav-pill-solid:hover {
+            background-color: var(--color-primary);
+            color: #ffe6d8;
+          }
+
+          .header-nav-pill-active {
+            background-color: #ffe6d8;
+            color: var(--color-primary);
+          }
+
+          .header-nav-pill-outline {
+            background-color: transparent;
+            color: #ffe6d8;
+          }
+
+          .header-nav-pill-outline:hover {
+            background-color: rgba(255, 230, 216, 0.1);
+          }
+        `}
+      </style>
     </Navbar>
   );
 };
 
-export default Header; 
+export default Header;

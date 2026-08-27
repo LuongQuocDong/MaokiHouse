@@ -1,24 +1,12 @@
 import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
-import { ref as dbRef, get as dbGet, set as dbSet } from 'firebase/database';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { database, auth } from '../config/firebase';
+import { auth } from '../config/firebase';
+import { contentService } from '../services/contentService';
+import { uploadService } from '../services/uploadService';
 import { toast } from 'react-hot-toast';
-
-// Cloudinary configuration
-const CLOUDINARY_CLOUD_NAME = 'dlkejgkqk';
-const CLOUDINARY_UPLOAD_PRESET = 'maokihouse';
-
-interface ContactContent {
-  id: string;
-  content: string;
-  title: string;
-  subtitle: string;
-  imageURL?: string;
-  updatedAt: number;
-  updatedBy?: string;
-}
+import type { ContactContent } from '../types';
 
 const ContactUs = () => {
   const [user] = useAuthState(auth);
@@ -33,14 +21,13 @@ const ContactUs = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const contentRef = dbRef(database, 'contact/default');
-        const snapshot = await dbGet(contentRef);
-        
-        if (snapshot.exists()) {
-          setContent(snapshot.val());
-          setEditedContent(snapshot.val().content);
-          setEditedTitle(snapshot.val().title);
-          setEditedSubtitle(snapshot.val().subtitle);
+        const data = await contentService.getContact();
+
+        if (data) {
+          setContent(data);
+          setEditedContent(data.content);
+          setEditedTitle(data.title);
+          setEditedSubtitle(data.subtitle);
         } else {
           // Initialize with default content if none exists
           const defaultContent: ContactContent = {
@@ -50,11 +37,14 @@ const ContactUs = () => {
             subtitle: "We'd love to hear from you",
             updatedAt: Date.now(),
           };
-          await dbSet(dbRef(database, 'contact/default'), defaultContent);
           setContent(defaultContent);
           setEditedContent(defaultContent.content);
           setEditedTitle(defaultContent.title);
           setEditedSubtitle(defaultContent.subtitle);
+          if (user) {
+            const idToken = await user.getIdToken();
+            await contentService.put(idToken, 'contact', defaultContent);
+          }
         }
       } catch (error) {
         console.error('Error fetching contact content:', error);
@@ -65,37 +55,8 @@ const ContactUs = () => {
     };
 
     fetchContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const uploadImageToCloudinary = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', 'maoki-house/contact');
-
-    try {
-      toast.loading('Uploading image...', { id: 'imageUpload' });
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const data = await response.json();
-      toast.success('Image uploaded successfully', { id: 'imageUpload' });
-      return data.secure_url;
-    } catch (error) {
-      console.error('Error uploading to Cloudinary:', error);
-      toast.error('Failed to upload image', { id: 'imageUpload' });
-      throw new Error('Failed to upload image. Please check your internet connection and try again.');
-    }
-  };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -105,15 +66,20 @@ const ContactUs = () => {
 
   const handleSave = async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
+      const idToken = await user.getIdToken();
       let imageURL = content?.imageURL;
-      
+
       if (selectedImage) {
         try {
-          imageURL = await uploadImageToCloudinary(selectedImage);
+          toast.loading('Uploading image...', { id: 'imageUpload' });
+          imageURL = await uploadService.uploadImage(idToken, selectedImage, 'maoki-house/contact');
+          toast.success('Image uploaded successfully', { id: 'imageUpload' });
         } catch (error) {
+          console.error('Error uploading image:', error);
+          toast.error('Failed to upload image', { id: 'imageUpload' });
           setLoading(false);
           return;
         }
@@ -129,8 +95,8 @@ const ContactUs = () => {
         updatedBy: user.uid
       };
 
-      await dbSet(dbRef(database, 'contact/default'), updatedContent);
-      setContent(updatedContent);
+      const saved = await contentService.put(idToken, 'contact', updatedContent);
+      setContent(saved);
       setIsEditing(false);
       setSelectedImage(null);
       toast.success('Contact information updated successfully');
@@ -170,7 +136,7 @@ const ContactUs = () => {
                 className="mb-3"
               />
             </Form.Group>
-            
+
             <Form.Group className="mb-3">
               <Form.Label>Subtitle</Form.Label>
               <Form.Control
@@ -242,9 +208,9 @@ const ContactUs = () => {
                 />
               </div>
             )}
-            <div 
-              className="mb-4 mx-auto" 
-              style={{ 
+            <div
+              className="mb-4 mx-auto"
+              style={{
                 maxWidth: '800px',
                 fontSize: '1.1rem',
                 lineHeight: '1.8',
@@ -271,4 +237,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs; 
+export default ContactUs;

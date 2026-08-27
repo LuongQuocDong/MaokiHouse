@@ -1,9 +1,6 @@
 // Import Firebase SDK functions
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
 
 // Your Firebase project configuration
 const firebaseConfig = {
@@ -20,11 +17,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize services with region and custom domain if needed
+// Auth is the only Firebase client service still used directly in the browser.
+// RTDB reads/writes and file uploads now go through the backend API (see src/services).
 const auth = getAuth(app);
-const database = getDatabase(app);
-const storage = getStorage(app);
-const db = getFirestore(app);
 
-// Export Firebase services
-export { auth, database, storage, db };
+export { auth };

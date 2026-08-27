@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ref, get } from 'firebase/database';
-import { database } from '../config/firebase';
+import { homestayService } from '../services/homestayService';
 import type { Homestay } from '../types';
 
 export const useHomestayDetail = (id: string | undefined) => {
@@ -15,15 +14,9 @@ export const useHomestayDetail = (id: string | undefined) => {
           setError(new Error('No homestay ID provided'));
           return;
         }
-        
-        const homestayRef = ref(database, `homestays/${id}`);
-        const snapshot = await get(homestayRef);
-        
-        if (snapshot.exists()) {
-          setHomestay({ id: snapshot.key as string, ...snapshot.val() } as Homestay);
-        } else {
-          setError(new Error('Homestay not found'));
-        }
+
+        const data = await homestayService.get(id);
+        setHomestay(data);
       } catch (error) {
         console.error('Error fetching homestay:', error);
         setError(error instanceof Error ? error : new Error('Failed to fetch homestay'));
@@ -36,4 +29,4 @@ export const useHomestayDetail = (id: string | undefined) => {
   }, [id]);
 
   return { homestay, loading, error };
-}; 
+};

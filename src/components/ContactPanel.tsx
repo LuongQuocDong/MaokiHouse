@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CONTACT_LINKS } from '../constants/contact';
 
 const ContactPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,22 +22,22 @@ const ContactPanel = () => {
         </div>
         
         <div className="contact-panel-content">
-          <a href="https://www.facebook.com/p/Maoki-House-100090585424824/" target="_blank" rel="noopener noreferrer" className="contact-item">
+          <a href={CONTACT_LINKS.facebook} target="_blank" rel="noopener noreferrer" className="contact-item">
             <i className="bi bi-facebook contact-icon"></i>
             <span>Our Facebook Page</span>
           </a>
-          
-          <a href="https://wa.me/84868191581" target="_blank" rel="noopener noreferrer" className="contact-item">
+
+          <a href={CONTACT_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="contact-item">
             <i className="bi bi-whatsapp contact-icon"></i>
-            <span>+84868191581 (Whatsapp)</span>
-          </a>
-          
-          <a href="mailto:maokihouse.sg@gmail.com" className="contact-item">
-            <i className="bi bi-envelope contact-icon"></i>
-            <span>maokihouse.sg@gmail.com</span>
+            <span>{CONTACT_LINKS.whatsappDisplay}</span>
           </a>
 
-          <a href="https://www.airbnb.com/users/show/502109503" target="_blank" rel="noopener noreferrer" className="contact-item">
+          <a href={CONTACT_LINKS.emailHref} className="contact-item">
+            <i className="bi bi-envelope contact-icon"></i>
+            <span>{CONTACT_LINKS.email}</span>
+          </a>
+
+          <a href={CONTACT_LINKS.airbnb} target="_blank" rel="noopener noreferrer" className="contact-item">
             <i className="bi bi-house-heart contact-icon"></i>
             <span>Our Airbnb Profile</span>
           </a>
