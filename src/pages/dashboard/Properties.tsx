@@ -3,45 +3,43 @@ import toast from 'react-hot-toast';
 import { Form, Button, Row, Col, Spinner } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
-import { propertyService } from '../../services/propertyService';
+import { homestayService } from '../../services/homestayService';
 import { uploadService } from '../../services/uploadService';
-import type { Property } from '../../types';
+import type { Homestay } from '../../types';
 
 interface FormState {
   title: string;
-  address: string;
-  status: 'active' | 'inactive';
-  basePrice: string;
+  description: string;
+  price: string;
+  airbnbLink: string;
+  phone: string;
   images: File[];
 }
 
-const initialForm: FormState = { title: '', address: '', status: 'active', basePrice: '', images: [] };
+const initialForm: FormState = { title: '', description: '', price: '', airbnbLink: '', phone: '', images: [] };
 
 const Properties = () => {
   const [user] = useAuthState(auth);
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [homestays, setHomestays] = useState<Homestay[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<FormState>(initialForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchProperties = async () => {
-    if (!user) return;
+  const fetchHomestays = async () => {
     try {
-      const idToken = await user.getIdToken();
-      setProperties(await propertyService.list(idToken));
+      setHomestays(await homestayService.list());
     } catch (error) {
       console.error(error);
-      toast.error('Không tải được danh sách bất động sản');
+      toast.error('Không tải được danh sách phòng');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProperties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+    fetchHomestays();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,59 +47,65 @@ const Properties = () => {
     setSubmitting(true);
     try {
       const idToken = await user.getIdToken();
-      let imageURLs: string[] | undefined;
+      const existing = editingId ? homestays.find((h) => h.id === editingId) : undefined;
+
+      let imageURLs: string[] = existing?.imageURLs ?? [];
       if (form.images.length > 0) {
         toast.loading('Đang tải ảnh...', { id: 'upload' });
-        imageURLs = await uploadService.uploadImages(idToken, form.images, 'maokihouse/properties');
+        imageURLs = await uploadService.uploadImages(idToken, form.images, 'maokihouse/homestays');
         toast.success('Tải ảnh thành công', { id: 'upload' });
       }
 
-      const payload: Partial<Property> = {
+      const payload = {
         title: form.title.trim(),
-        address: form.address.trim(),
-        status: form.status,
-        basePrice: parseFloat(form.basePrice) || 0,
-        ...(imageURLs ? { imageURLs } : {}),
+        description: form.description.trim(),
+        price: parseFloat(form.price) || 0,
+        airbnbLink: form.airbnbLink.trim(),
+        phone: form.phone.trim(),
+        imageURLs,
+        mainImageURL: imageURLs[0] || existing?.mainImageURL || '',
       };
 
       if (editingId) {
-        await propertyService.update(idToken, editingId, payload);
-        toast.success('Đã cập nhật bất động sản');
+        await homestayService.update(idToken, editingId, payload);
+        toast.success('Đã cập nhật phòng');
       } else {
-        await propertyService.create(idToken, { ...payload, imageURLs: imageURLs || [] });
-        toast.success('Đã thêm bất động sản');
+        await homestayService.create(idToken, payload);
+        toast.success('Đã thêm phòng mới');
       }
 
       setForm(initialForm);
       setEditingId(null);
-      fetchProperties();
+      fetchHomestays();
     } catch (error) {
       console.error(error);
-      toast.error('Lưu bất động sản thất bại');
+      toast.error('Lưu phòng thất bại');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleEdit = (property: Property) => {
+  const handleEdit = (homestay: Homestay) => {
     setForm({
-      title: property.title,
-      address: property.address,
-      status: property.status,
-      basePrice: String(property.basePrice),
+      title: homestay.title,
+      description: homestay.description,
+      price: String(homestay.price),
+      airbnbLink: homestay.airbnbLink || '',
+      phone: homestay.phone || '',
       images: [],
     });
-    setEditingId(property.id);
+    setEditingId(homestay.id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDelete = async (property: Property) => {
+  const handleDelete = async (homestay: Homestay) => {
     if (!user) return;
-    if (!window.confirm(`Xóa bất động sản "${property.title}"?`)) return;
+    if (!window.confirm(`Xóa phòng "${homestay.title}"?`)) return;
     try {
       const idToken = await user.getIdToken();
-      await propertyService.remove(idToken, property.id);
+      await homestayService.remove(idToken, homestay.id);
       toast.success('Đã xóa');
-      fetchProperties();
+      fetchHomestays();
     } catch (error) {
       console.error(error);
       toast.error('Xóa thất bại');
@@ -121,6 +125,9 @@ const Properties = () => {
       <div className="mb-4">
         <div className="eyebrow">Quản lý</div>
         <h1 className="font-display" style={{ fontSize: '1.9rem' }}>Phòng</h1>
+        <p className="text-muted small mb-0">
+          Thêm/sửa phòng ở đây sẽ hiển thị trực tiếp trên trang chủ để khách xem và đặt phòng.
+        </p>
       </div>
 
       <div className="elevated-card mb-4">
@@ -129,7 +136,7 @@ const Properties = () => {
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Tên bất động sản</Form.Label>
+                  <Form.Label>Tên phòng</Form.Label>
                   <Form.Control
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -139,58 +146,77 @@ const Properties = () => {
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Địa chỉ</Form.Label>
-                  <Form.Control
-                    value={form.address}
-                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={4}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Giá cơ bản / đêm</Form.Label>
+                  <Form.Label>Giá / đêm ($)</Form.Label>
                   <Form.Control
                     type="number"
                     min="0"
-                    value={form.basePrice}
-                    onChange={(e) => setForm({ ...form, basePrice: e.target.value })}
+                    step="0.01"
+                    value={form.price}
+                    onChange={(e) => setForm({ ...form, price: e.target.value })}
                     required
                   />
                 </Form.Group>
               </Col>
-              <Col md={4}>
+            </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Mô tả</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                required
+              />
+            </Form.Group>
+
+            <Row>
+              <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Trạng thái</Form.Label>
-                  <Form.Select
-                    value={form.status}
-                    onChange={(e) => setForm({ ...form, status: e.target.value as 'active' | 'inactive' })}
-                  >
-                    <option value="active">Đang hoạt động</option>
-                    <option value="inactive">Ngừng hoạt động</option>
-                  </Form.Select>
+                  <Form.Label>Link Airbnb</Form.Label>
+                  <Form.Control
+                    type="url"
+                    value={form.airbnbLink}
+                    onChange={(e) => setForm({ ...form, airbnbLink: e.target.value })}
+                    required
+                  />
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Hình ảnh</Form.Label>
+                  <Form.Label>Số điện thoại</Form.Label>
                   <Form.Control
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => {
-                      const files = (e.target as HTMLInputElement).files;
-                      setForm({ ...form, images: files ? Array.from(files) : [] });
-                    }}
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    required
                   />
                 </Form.Group>
               </Col>
             </Row>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Hình ảnh</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  const files = (e.target as HTMLInputElement).files;
+                  setForm({ ...form, images: files ? Array.from(files) : [] });
+                }}
+                required={!editingId}
+              />
+              <Form.Text className="text-muted">
+                {editingId
+                  ? 'Chọn ảnh mới để thay thế ảnh cũ (không bắt buộc). Ảnh đầu tiên sẽ là ảnh chính.'
+                  : 'Chọn một hoặc nhiều ảnh. Ảnh đầu tiên sẽ là ảnh chính.'}
+              </Form.Text>
+            </Form.Group>
+
             <div className="d-flex gap-2">
               <Button type="submit" disabled={submitting} className="pill-btn" style={{ border: 'none' }}>
-                {submitting ? 'Đang lưu...' : editingId ? 'Cập nhật' : 'Thêm bất động sản'}
+                {submitting ? 'Đang lưu...' : editingId ? 'Cập nhật phòng' : 'Thêm phòng'}
               </Button>
               {editingId && (
                 <Button variant="outline-secondary" onClick={() => { setEditingId(null); setForm(initialForm); }}>
@@ -203,34 +229,28 @@ const Properties = () => {
       </div>
 
       <div className="row g-3">
-        {properties.map((property) => (
-          <div className="col-12" key={property.id}>
+        {homestays.map((homestay) => (
+          <div className="col-12" key={homestay.id}>
             <div className="elevated-card">
               <div className="card-body p-3 d-flex align-items-center gap-3 flex-wrap">
                 <div className="d-flex gap-2" style={{ width: '220px', overflowX: 'auto' }}>
-                  {property.imageURLs?.map((url, i) => (
-                    <img key={i} src={url} alt={property.title} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
+                  {(homestay.imageURLs?.length ? homestay.imageURLs : [homestay.mainImageURL].filter(Boolean)).map((url, i) => (
+                    <img key={i} src={url} alt={homestay.title} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
                   ))}
                 </div>
                 <div className="flex-grow-1">
-                  <h3 className="h6 mb-1">{property.title}</h3>
-                  <div className="text-muted small">{property.address}</div>
-                  <div className="small mt-1">
-                    <span className="badge" style={{ background: property.status === 'active' ? 'var(--color-gold)' : '#999', color: 'var(--color-ink)' }}>
-                      {property.status === 'active' ? 'Hoạt động' : 'Ngừng'}
-                    </span>
-                    <span className="ms-2 text-muted">{property.basePrice.toLocaleString('vi-VN')} đ/đêm</span>
-                  </div>
+                  <h3 className="h6 mb-1">{homestay.title}</h3>
+                  <div className="text-muted small">${homestay.price}/đêm</div>
                 </div>
                 <div className="d-flex gap-2">
-                  <Button size="sm" variant="outline-primary" onClick={() => handleEdit(property)}>Sửa</Button>
-                  <Button size="sm" variant="outline-danger" onClick={() => handleDelete(property)}>Xóa</Button>
+                  <Button size="sm" variant="outline-primary" onClick={() => handleEdit(homestay)}>Sửa</Button>
+                  <Button size="sm" variant="outline-danger" onClick={() => handleDelete(homestay)}>Xóa</Button>
                 </div>
               </div>
             </div>
           </div>
         ))}
-        {properties.length === 0 && <div className="text-muted">Chưa có bất động sản nào.</div>}
+        {homestays.length === 0 && <div className="text-muted">Chưa có phòng nào.</div>}
       </div>
     </div>
   );
