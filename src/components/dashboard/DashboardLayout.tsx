@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
+import { Spinner } from 'react-bootstrap';
 import { auth } from '../../config/firebase';
 import {
   FaChartLine,
@@ -75,7 +77,15 @@ const DashboardLayout = () => {
           </div>
         </header>
         <main className="dashboard-content">
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="d-flex justify-content-center align-items-center py-5">
+                <Spinner animation="border" style={{ color: 'var(--color-primary)' }} />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

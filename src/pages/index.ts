@@ -2,9 +2,6 @@ import { lazy } from 'react';
 
 export const Home = lazy(() => import('./Home'));
 export const AboutUs = lazy(() => import('./AboutUs'));
-export const Features = lazy(() => import('./Features'));
-export const Pricing = lazy(() => import('./Pricing'));
-export const Services = lazy(() => import('./Services'));
 export const HomestayDetail = lazy(() => import('./HomestayDetail'));
 export const AdminLogin = lazy(() => import('./admin/Login'));
 export const ContactUs = lazy(() => import('../components/ContactUs'));

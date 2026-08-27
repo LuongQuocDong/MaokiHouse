@@ -9,7 +9,7 @@ import { CONTACT_LINKS } from '../../constants/contact';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiLogOut } from 'react-icons/bi';
-import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome, FaListUl, FaTags, FaConciergeBell } from 'react-icons/fa';
+import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome, FaCalendarAlt } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 
 interface NavButtonProps {
@@ -143,8 +143,8 @@ const Header = () => {
     </motion.div>
   );
 
-  // Đăng nhập button for mobile view - styled to match other header buttons
-  const LoginMobileButton = () => (
+  // Book Now button for mobile view - styled to match other header buttons
+  const BookNowMobileButton = () => (
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -157,11 +157,17 @@ const Header = () => {
         zIndex: 1031
       }}
     >
-      <Link to="/admin" className="text-decoration-none">
+      <a
+        href={CONTACT_LINKS.airbnb}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-decoration-none"
+      >
         <div className="header-nav-pill header-nav-pill-solid header-nav-pill-small">
-          Đăng nhập
+          <FaCalendarAlt size={16} />
+          Book Now
         </div>
-      </Link>
+      </a>
     </motion.div>
   );
 
@@ -194,7 +200,7 @@ const Header = () => {
           />
         </Navbar.Brand>
 
-        {isMobile && !user && <LoginMobileButton />}
+        {isMobile && <BookNowMobileButton />}
 
         <Navbar.Toggle
           aria-controls="navbar-nav"
@@ -239,23 +245,15 @@ const Header = () => {
                     </motion.div>
 
                     <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="/about" icon={FaInfoCircle} mobile>About</NavButton>
+                      <NavButton to="/about" icon={FaInfoCircle} mobile>About Us</NavButton>
                     </motion.div>
 
                     <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="/features" icon={FaListUl} mobile>Features</NavButton>
+                      <NavButton to="/contact" icon={FaEnvelope} mobile>Contact Us</NavButton>
                     </motion.div>
 
                     <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="/pricing" icon={FaTags} mobile>Pricing</NavButton>
-                    </motion.div>
-
-                    <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="/services" icon={FaConciergeBell} mobile>Services</NavButton>
-                    </motion.div>
-
-                    <motion.div variants={mobileNavLinkVariants}>
-                      <NavButton to="/contact" icon={FaEnvelope} mobile>Contact</NavButton>
+                      <NavButton to={CONTACT_LINKS.airbnb} icon={FaCalendarAlt} mobile external>Book Now</NavButton>
                     </motion.div>
 
                     {user && (
@@ -281,20 +279,14 @@ const Header = () => {
                   className="d-flex align-items-center gap-3"
                 >
                   <NavButton to="/" icon={FaHome}>Home</NavButton>
-                  <NavButton to="/about" icon={FaInfoCircle}>About</NavButton>
-                  <NavButton to="/features" icon={FaListUl}>Features</NavButton>
-                  <NavButton to="/pricing" icon={FaTags}>Pricing</NavButton>
-                  <NavButton to="/services" icon={FaConciergeBell}>Services</NavButton>
-                  <NavButton to="/contact" icon={FaEnvelope}>Contact</NavButton>
-                  {user ? (
+                  <NavButton to="/about" icon={FaInfoCircle}>About Us</NavButton>
+                  <NavButton to="/contact" icon={FaEnvelope}>Contact Us</NavButton>
+                  <NavButton to={CONTACT_LINKS.airbnb} icon={FaCalendarAlt} external>Book Now</NavButton>
+                  {user && (
                     <>
                       <NavButton to="/admin/dashboard" icon={FaChartBar}>Dashboard</NavButton>
                       <LogoutButton />
                     </>
-                  ) : (
-                    <Link to="/admin" className="text-decoration-none">
-                      <div className="header-nav-pill header-nav-pill-solid">Đăng nhập</div>
-                    </Link>
                   )}
                 </motion.div>
               )}

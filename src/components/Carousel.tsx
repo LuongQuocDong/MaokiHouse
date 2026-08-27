@@ -1,36 +1,54 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { homestayService } from '../services/homestayService';
 import ImageCarousel from './ImageCarousel';
 
 const images = [
   {
     url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1752588058/carousel1_detuga.jpg',
-    alt: 'Host dashboard overview',
-    caption: 'Quản lý mọi kênh OTA trong một nơi'
+    alt: 'Maoki House Welcome',
+    caption: 'Welcome to Maoki House'
   },
   {
     url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1752588057/carousel2_hbopq7.jpg',
-    alt: 'Unified calendar',
-    caption: 'Lịch đặt phòng đồng bộ'
+    alt: 'Comfortable Living Space',
+    caption: 'Comfortable Living Spaces'
   },
   {
     url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1752588057/carousel3_niy7f8.jpg',
-    alt: 'Revenue reporting',
-    caption: 'Báo cáo doanh thu minh bạch'
+    alt: 'Modern Amenities',
+    caption: 'Modern Amenities'
   },
   {
     url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1752588057/carousel4_uswfub.jpg ',
-    alt: 'Unified inbox',
-    caption: 'Hộp thư khách hàng hợp nhất'
+    alt: 'Beautiful Views',
+    caption: 'Beautiful Views'
   },
   {
     url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1752588057/carousel5_lsbbqs.jpg',
-    alt: 'Peaceful operations',
-    caption: 'Vận hành nhẹ nhàng, hiệu quả'
+    alt: 'Peaceful Environment',
+    caption: 'Peaceful Environment'
   }
 ];
 
 const HomeCarousel = () => {
+  const [airbnbLink, setAirbnbLink] = useState('');
+
+  useEffect(() => {
+    const fetchFirstHomestay = async () => {
+      try {
+        const homestays = await homestayService.list();
+        if (homestays.length > 0) {
+          setAirbnbLink(homestays[0].airbnbLink);
+        }
+      } catch (error) {
+        console.error('Error fetching Airbnb link:', error);
+      }
+    };
+
+    fetchFirstHomestay();
+  }, []);
+
   return (
     <div className="hero-carousel full-bleed position-relative">
       <ImageCarousel images={images} height="100%" interval={5000} captionStyle="none" />
@@ -44,17 +62,24 @@ const HomeCarousel = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
         >
-          <div className="eyebrow mb-3" style={{ color: 'var(--color-gold-light)' }}>Channel Manager &middot; PMS cho Host</div>
-          <h1 className="hero-title font-display mb-3">MaokiHouse</h1>
+          <div className="eyebrow mb-3" style={{ color: 'var(--color-gold-light)' }}>Saigon &middot; Boutique Homestay</div>
+          <h1 className="hero-title font-display mb-3">Maoki House</h1>
           <p className="hero-subtitle mx-auto mb-4">
-            Nền tảng quản lý cho chủ nhà Airbnb, Booking.com, Agoda &mdash; đồng bộ lịch, tin nhắn và doanh thu trong một nơi duy nhất.
+            A quiet, elegant retreat in the heart of Saigon &mdash; your local home away from home.
           </p>
 
-          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }} style={{ display: 'inline-block' }}>
-            <Link to="/admin" className="pill-btn hero-cta">
-              Đăng nhập
-            </Link>
-          </motion.div>
+          {airbnbLink && (
+            <motion.a
+              href={airbnbLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pill-btn hero-cta"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Book Now
+            </motion.a>
+          )}
         </motion.div>
 
         <motion.div
@@ -97,7 +122,7 @@ const HomeCarousel = () => {
           }
 
           .hero-subtitle {
-            max-width: 620px;
+            max-width: 560px;
             font-size: clamp(1rem, 1.6vw, 1.25rem);
             color: var(--color-cream);
             opacity: 0.92;
