@@ -116,7 +116,7 @@ const CalendarView = () => {
         {selected && (
           <Modal.Body>
             <p><strong>Khách:</strong> {selected.guestName}</p>
-            <p><strong>Bất động sản:</strong> {propertyName(selected.propertyId)}</p>
+            <p><strong>Room:</strong> {propertyName(selected.propertyId)}</p>
             <p><strong>Kênh:</strong> {selected.source}</p>
             <p><strong>Nhận phòng:</strong> {selected.checkIn}</p>
             <p><strong>Trả phòng:</strong> {selected.checkOut}</p>

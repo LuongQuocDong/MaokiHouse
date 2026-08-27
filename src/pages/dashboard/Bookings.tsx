@@ -168,7 +168,7 @@ const Bookings = () => {
             <thead>
               <tr>
                 <th>Khách</th>
-                <th>Bất động sản</th>
+                <th>Room</th>
                 <th>Kênh</th>
                 <th>Nhận phòng</th>
                 <th>Trả phòng</th>
@@ -207,7 +207,7 @@ const Bookings = () => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group className="mb-3">
-            <Form.Label>Bất động sản</Form.Label>
+            <Form.Label>Room</Form.Label>
             <Form.Select value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })}>
               <option value="">Chọn bất động sản</option>
               {properties.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}

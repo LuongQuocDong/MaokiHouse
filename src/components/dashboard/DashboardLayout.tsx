@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
@@ -21,7 +21,7 @@ import { BiLogOut } from 'react-icons/bi';
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Overview', icon: FaChartLine, end: true },
-  { to: '/admin/dashboard/properties', label: 'Properties', icon: FaHome },
+  { to: '/admin/dashboard/properties', label: 'Rooms', icon: FaHome },
   { to: '/admin/dashboard/bookings', label: 'Bookings', icon: FaCalendarCheck },
   { to: '/admin/dashboard/calendar', label: 'Calendar', icon: FaCalendarAlt },
   { to: '/admin/dashboard/messages', label: 'Messages', icon: FaEnvelope },
@@ -48,10 +48,6 @@ const DashboardLayout = () => {
   return (
     <div className="dashboard-shell full-bleed">
       <aside className="dashboard-sidebar">
-        <Link to="/" className="dashboard-logo">
-          <span className="dashboard-logo-mark">MK</span>
-          <span className="dashboard-logo-text">MaokiHouse</span>
-        </Link>
         <nav className="dashboard-nav">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
@@ -114,7 +110,11 @@ const DashboardLayout = () => {
           .dashboard-sidebar {
             width: 260px;
             flex-shrink: 0;
-            background: var(--color-charcoal);
+            background-color: #100b09;
+            background-image:
+              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a15a' stroke-width='1' opacity='0.07'%3E%3Cpath d='M60 20c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M60 72c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M20 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Cpath d='M72 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Ccircle cx='60' cy='60' r='6'/%3E%3Cpath d='M40 40c11 0 20 9 20 20-11 0-20-9-20-20z'/%3E%3Cpath d='M80 40c-11 0-20 9-20 20 11 0 20-9 20-20z'/%3E%3Cpath d='M40 80c11 0 20-9 20-20-11 0-20 9-20 20z'/%3E%3Cpath d='M80 80c-11 0-20-9-20-20 11 0 20 9 20 20z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 150px 150px;
+            background-repeat: repeat;
             color: var(--color-cream);
             display: flex;
             flex-direction: column;
@@ -125,38 +125,11 @@ const DashboardLayout = () => {
             min-height: 100vh;
           }
 
-          .dashboard-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            margin-bottom: 2rem;
-            padding: 0 0.5rem;
-          }
-
-          .dashboard-logo-mark {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
-            color: var(--color-ink);
-          }
-
-          .dashboard-logo-text {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            color: var(--color-cream);
-          }
-
           .dashboard-nav {
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
+            padding-top: 4.5rem;
           }
 
           .dashboard-nav-link {
