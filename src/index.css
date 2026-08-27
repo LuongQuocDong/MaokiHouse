@@ -1,17 +1,29 @@
 :root {
-  --primary-color: #824a39;
-  --primary-dark: #6b3d2f;
-  --primary-light: #fdf2e9;
-  --background-color: #ffe6d8;
+  /* ---- Design tokens: premium terracotta/espresso + cream + gold ---- */
+  --color-ink: #2b1810;
+  --color-primary: #8a4a34;
+  --color-primary-dark: #5c2f20;
+  --color-primary-light: #b06b4f;
+  --color-gold: #c9a15a;
+  --color-gold-light: #e8d5b0;
+  --color-cream: #fdf6ee;
+  --color-blush: #f6e2d3;
+  --color-charcoal: #1c1310;
+  --color-white: #ffffff;
 
-  /* Brand palette (formerly duplicated in tailwind.config.js, which was
-     never wired up to the build — Tailwind isn't installed). These are
-     aliases of the vars above, kept under the --color-* naming used by
-     newer components. */
-  --color-primary: var(--primary-color);
-  --color-primary-dark: var(--primary-dark);
-  --color-background: var(--background-color);
-  --color-logo-light: var(--primary-light);
+  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Be Vietnam Pro', 'Inter', -apple-system, sans-serif;
+
+  /* ---- Back-compat aliases for existing class names/vars across the app ---- */
+  --primary-color: var(--color-primary);
+  --primary-dark: var(--color-primary-dark);
+  --primary-light: var(--color-blush);
+  --background-color: var(--color-cream);
+  --color-background: var(--color-cream);
+  --color-logo-light: var(--color-blush);
+
+  --shadow-soft: 0 10px 30px rgba(43, 24, 16, 0.08);
+  --shadow-elevated: 0 20px 45px rgba(43, 24, 16, 0.16);
 }
 
 html {
@@ -21,8 +33,22 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-color);
-  color: var(--primary-color);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
 section, .container {
@@ -31,31 +57,111 @@ section, .container {
 }
 
 a {
-  color: var(--primary-color);
+  color: var(--color-primary);
   text-decoration: none;
+  transition: color 0.25s ease;
 }
 
 a:hover {
-  color: var(--primary-dark);
+  color: var(--color-primary-dark);
 }
 
 .btn-primary {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-  color: var(--primary-light) !important;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-cream) !important;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease !important;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-dark) !important;
-  border-color: var(--primary-dark) !important;
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
 }
 
 .text-primary {
-  color: var(--primary-color) !important;
+  color: var(--color-primary) !important;
 }
 
 .bg-primary {
-  background-color: var(--primary-color) !important;
+  background-color: var(--color-primary) !important;
+}
+
+/* ---- Gold ornamental section divider ---- */
+.gold-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.25rem auto 2rem;
+  width: fit-content;
+  color: var(--color-gold);
+}
+
+.gold-divider::before,
+.gold-divider::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold));
+}
+
+.gold-divider::after {
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+}
+
+.gold-divider .gold-divider-icon {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
+  color: var(--color-ink);
+  border: none;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.pill-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-elevated);
+  filter: brightness(1.05);
+  color: var(--color-ink);
+}
+
+.elevated-card {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--color-white);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.elevated-card:hover {
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-4px);
 }
 
 .hover-shadow-lg {
@@ -63,5 +169,12 @@ a:hover {
 }
 
 .hover-shadow-lg:hover {
-  box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+  box-shadow: var(--shadow-elevated) !important;
+}
+
+/* Break a section out of the Bootstrap Container it's nested in, to go full-bleed */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }

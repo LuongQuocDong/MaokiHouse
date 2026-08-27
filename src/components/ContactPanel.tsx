@@ -52,22 +52,22 @@ const ContactPanel = () => {
               width: 60px;
               height: 60px;
               border-radius: 50%;
-              background-color: #824a39;
-              color: white;
+              background: linear-gradient(135deg, var(--color-gold), var(--color-primary));
+              color: var(--color-cream);
               border: none;
               cursor: pointer;
               display: flex;
               align-items: center;
               justify-content: center;
               font-size: 24px;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              box-shadow: var(--shadow-elevated);
               transition: all 0.3s ease;
               z-index: 1000;
             }
 
             .floating-contact-btn:hover {
-              transform: scale(1.05);
-              background-color: #6b3d2f;
+              transform: scale(1.06);
+              filter: brightness(1.08);
             }
 
             .contact-panel {
@@ -75,14 +75,15 @@ const ContactPanel = () => {
               bottom: 6rem;
               right: 2rem;
               width: 300px;
-              background-color: white;
-              border-radius: 12px;
-              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+              background-color: var(--color-cream);
+              border-radius: 14px;
+              box-shadow: var(--shadow-elevated);
               transform: translateY(20px);
               opacity: 0;
               visibility: hidden;
               transition: all 0.3s ease;
               z-index: 999;
+              overflow: hidden;
             }
 
             .contact-panel.open {
@@ -92,16 +93,16 @@ const ContactPanel = () => {
             }
 
             .contact-panel-header {
-              background-color: #824a39;
-              color: white;
-              padding: 1rem;
-              border-radius: 12px 12px 0 0;
+              background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+              color: var(--color-cream);
+              padding: 1rem 1.25rem;
             }
 
             .contact-panel-header h3 {
               margin: 0;
-              font-size: 1.1rem;
-              font-weight: 500;
+              font-family: var(--font-display);
+              font-size: 1.05rem;
+              font-weight: 600;
             }
 
             .contact-panel-content {
@@ -112,22 +113,24 @@ const ContactPanel = () => {
               display: flex;
               align-items: center;
               padding: 0.75rem;
-              color: #333;
+              color: var(--color-ink);
               text-decoration: none;
               border-radius: 8px;
               transition: all 0.2s ease;
               margin-bottom: 0.5rem;
-              background-color: #f8f9fa;
+              background-color: var(--color-blush);
             }
 
             .contact-item:hover {
-              background-color: #ffe6d8;
-              color: #824a39;
+              background-color: var(--color-gold-light);
+              color: var(--color-primary-dark);
+              transform: translateX(2px);
             }
 
             .contact-icon {
               font-size: 1.5rem;
               margin-right: 1rem;
+              color: var(--color-primary);
             }
           `}
         </style>

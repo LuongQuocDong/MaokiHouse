@@ -50,58 +50,107 @@ const HomeCarousel = () => {
   }, []);
 
   return (
-    <div className="position-relative mb-5">
-      <ImageCarousel images={images} height="500px" interval={5000} captionStyle="shadow-text" />
+    <div className="hero-carousel full-bleed position-relative">
+      <ImageCarousel images={images} height="100%" interval={5000} captionStyle="none" />
 
-      {/* Airbnb Button - Positioned with absolute positioning */}
-      {airbnbLink && (
-        <div
-          className="position-absolute start-50 translate-middle-x"
-          style={{
-            zIndex: 10,
-            top: '80%',
-            pointerEvents: 'auto',
-            textAlign: 'center'
-          }}
+      {/* Cinematic gradient overlay for text legibility */}
+      <div className="hero-gradient" />
+
+      <div className="hero-content position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center px-3">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            style={{ display: 'inline-block' }}
-          >
+          <div className="eyebrow mb-3" style={{ color: 'var(--color-gold-light)' }}>Saigon &middot; Boutique Homestay</div>
+          <h1 className="hero-title font-display mb-3">Maoki House</h1>
+          <p className="hero-subtitle mx-auto mb-4">
+            A quiet, elegant retreat in the heart of Saigon &mdash; your local home away from home.
+          </p>
+
+          {airbnbLink && (
             <motion.a
               href={airbnbLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-danger btn-lg"
-              style={{
-                backgroundColor: 'rgba(255, 56, 92, 0.9)',
-                border: '2px solid #ff385c',
-                color: 'white',
-                padding: '15px 30px',
-                borderRadius: '50px',
-                fontSize: '1.2rem',
-                fontWeight: '600',
-                textDecoration: 'none',
-                display: 'inline-block',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                backdropFilter: 'blur(4px)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 1)';
-                e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 56, 92, 0.9)';
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-              }}
+              className="pill-btn hero-cta"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
             >
               Book Now
             </motion.a>
-          </motion.div>
-        </div>
-      )}
+          )}
+        </motion.div>
+
+        <motion.div
+          className="hero-scroll-cue"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <i className="bi bi-chevron-down"></i>
+        </motion.div>
+      </div>
+
+      <style>
+        {`
+          .hero-carousel {
+            height: 100vh;
+            min-height: 560px;
+            overflow: hidden;
+          }
+
+          .hero-carousel .image-carousel-wrapper,
+          .hero-carousel .image-carousel-wrapper .carousel,
+          .hero-carousel .image-carousel-wrapper .carousel-inner,
+          .hero-carousel .image-carousel-wrapper .carousel-item,
+          .hero-carousel .image-carousel-wrapper img {
+            height: 100% !important;
+          }
+
+          .hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(28, 19, 16, 0.35) 0%, rgba(28, 19, 16, 0.25) 45%, rgba(28, 19, 16, 0.75) 100%);
+            pointer-events: none;
+          }
+
+          .hero-title {
+            font-size: clamp(2.75rem, 7vw, 5rem);
+            color: var(--color-cream);
+            text-shadow: 0 4px 24px rgba(0,0,0,0.35);
+            margin-bottom: 0.5rem;
+          }
+
+          .hero-subtitle {
+            max-width: 560px;
+            font-size: clamp(1rem, 1.6vw, 1.25rem);
+            color: var(--color-cream);
+            opacity: 0.92;
+          }
+
+          .hero-cta {
+            font-size: 1.05rem;
+            padding: 0.9rem 2.25rem;
+          }
+
+          .hero-scroll-cue {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--color-cream);
+            font-size: 1.5rem;
+            opacity: 0.85;
+          }
+
+          @media (max-width: 576px) {
+            .hero-carousel {
+              height: 88vh;
+              min-height: 480px;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

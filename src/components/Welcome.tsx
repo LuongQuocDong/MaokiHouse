@@ -86,7 +86,7 @@ const Welcome = () => {
 
   if (loading) {
     return (
-      <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: '#ffe6d8' }}>
+      <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: 'var(--color-blush)' }}>
         <Card.Body className="p-4 text-center">
           Loading...
         </Card.Body>
@@ -99,8 +99,8 @@ const Welcome = () => {
   }
 
   return (
-    <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: '#ffe6d8' }}>
-      <Card.Body className="p-4">
+    <Card className="border-0 mb-5 welcome-card" style={{ backgroundColor: 'var(--color-cream)' }}>
+      <Card.Body className="p-4 p-md-5">
         {isEditing && user ? (
           <>
             <Form.Control
@@ -121,35 +121,33 @@ const Welcome = () => {
           </>
         ) : (
           <div className="text-center">
-            <h1 className="display-4 mb-3" style={{ color: '#666' }}>
-              <span style={{ color: '#666' }}>Welcome to </span>
-              <span style={{ color: '#dc3545' }}>Maoki House</span>
-              <div style={{ fontSize: '0.8em' }}>Your Local Home in Saigon!</div>
+            <div className="eyebrow mb-3">Local & Genuine</div>
+            <h1 className="font-display mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+              <span>Welcome to </span>
+              <span style={{ color: 'var(--color-primary)' }}>Maoki House</span>
+              <div style={{ fontSize: '0.5em', fontWeight: 500, marginTop: '0.5rem', color: 'var(--color-primary-light)' }}>
+                Your Local Home in Saigon
+              </div>
             </h1>
-            <div className="mb-4" style={{ color: '#ffa500', fontSize: '1.2rem' }}>
+            <div className="gold-divider"><i className="bi bi-flower1 gold-divider-icon"></i></div>
+            <div className="mb-4" style={{ color: 'var(--color-gold)', fontSize: '1.15rem', fontStyle: 'italic' }}>
               {content.subtitle}
             </div>
             <div
               className="mb-4 mx-auto"
               style={{
-                maxWidth: '800px',
+                maxWidth: '760px',
                 fontSize: '1.1rem',
-                lineHeight: '1.8',
-                color: '#666'
+                lineHeight: '1.9',
+                color: 'var(--color-ink)',
+                opacity: 0.85
               }}
             >
               {renderHighlighted(content.content, HIGHLIGHTED_PHRASE)}
             </div>
             <div className="d-flex justify-content-center mt-5">
-              <Link
-                to="/about"
-                className="btn btn-outline-danger px-4 py-2"
-                style={{
-                  borderRadius: '25px',
-                  fontSize: '1.1rem'
-                }}
-              >
-                READ MORE
+              <Link to="/about" className="pill-btn">
+                Read More <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
             {user && (

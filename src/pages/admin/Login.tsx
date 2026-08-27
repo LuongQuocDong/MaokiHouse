@@ -99,7 +99,7 @@ const Login = () => {
             alt="Maoki House" 
             style={{ width: '180px', marginBottom: '1rem' }}
           />
-          <h2 className="fw-bold" style={{ color: '#824a39' }}>Admin Login</h2>
+          <h2 className="font-display fw-bold" style={{ color: 'var(--color-primary)' }}>Admin Login</h2>
           <p className="text-muted">Enter your credentials to access the admin area</p>
         </div>
 
@@ -119,7 +119,7 @@ const Login = () => {
             <Form.Label className="fw-semibold">Email address</Form.Label>
             <InputGroup>
               <InputGroup.Text style={{ backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}>
-                <FaEnvelope color="#824a39" />
+                <FaEnvelope color="var(--color-primary)" />
               </InputGroup.Text>
               <Form.Control
                 type="email"
@@ -137,7 +137,7 @@ const Login = () => {
             <Form.Label className="fw-semibold">Password</Form.Label>
             <InputGroup>
               <InputGroup.Text style={{ backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}>
-                <FaLock color="#824a39" />
+                <FaLock color="var(--color-primary)" />
               </InputGroup.Text>
               <Form.Control
                 type={showPassword ? "text" : "password"}
@@ -152,7 +152,7 @@ const Login = () => {
                 onClick={togglePasswordVisibility}
                 style={{ cursor: 'pointer', backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}
               >
-                {showPassword ? <FaEyeSlash color="#824a39" /> : <FaEye color="#824a39" />}
+                {showPassword ? <FaEyeSlash color="var(--color-primary)" /> : <FaEye color="var(--color-primary)" />}
               </InputGroup.Text>
             </InputGroup>
           </Form.Group>
@@ -163,8 +163,8 @@ const Login = () => {
               disabled={loading}
               className="w-100 py-2 mt-3 d-flex align-items-center justify-content-center"
               style={{ 
-                backgroundColor: '#824a39',
-                borderColor: '#824a39',
+                backgroundColor: 'var(--color-primary)',
+                borderColor: 'var(--color-primary)',
                 fontSize: '1.1rem',
                 fontWeight: '500'
               }}
@@ -196,7 +196,7 @@ const Login = () => {
           }
           
           .form-control:focus, .input-group-text:focus {
-            border-color: #824a39;
+            border-color: var(--color-primary);
             box-shadow: 0 0 0 0.25rem rgba(130, 74, 57, 0.25);
           }
           `}

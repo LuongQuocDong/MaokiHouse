@@ -110,7 +110,7 @@ const ContactUs = () => {
 
   if (loading) {
     return (
-      <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: '#ffe6d8' }}>
+      <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: 'var(--color-blush)' }}>
         <Card.Body className="p-4 text-center">
           Loading...
         </Card.Body>
@@ -123,8 +123,8 @@ const ContactUs = () => {
   }
 
   return (
-    <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: '#ffe6d8' }}>
-      <Card.Body className="p-4">
+    <Card className="border-0 mb-5 welcome-card" style={{ backgroundColor: 'var(--color-cream)' }}>
+      <Card.Body className="p-4 p-md-5">
         {isEditing && user ? (
           <>
             <Form.Group className="mb-3">
@@ -192,10 +192,12 @@ const ContactUs = () => {
           </>
         ) : (
           <div className="text-center">
-            <h1 className="display-4 mb-3" style={{ color: '#666' }}>
+            <div className="eyebrow mb-3">Get In Touch</div>
+            <h1 className="font-display mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
               {content.title}
             </h1>
-            <div className="mb-4" style={{ color: '#ffa500', fontSize: '1.2rem' }}>
+            <div className="gold-divider"><i className="bi bi-envelope-heart gold-divider-icon"></i></div>
+            <div className="mb-4" style={{ color: 'var(--color-gold)', fontSize: '1.15rem', fontStyle: 'italic' }}>
               {content.subtitle}
             </div>
             {content.imageURL && (
@@ -203,18 +205,19 @@ const ContactUs = () => {
                 <img
                   src={content.imageURL}
                   alt="Contact us"
-                  style={{ maxWidth: '100%', height: 'auto' }}
-                  className="rounded shadow-sm"
+                  style={{ maxWidth: '100%', height: 'auto', borderRadius: '16px' }}
+                  className="shadow-sm"
                 />
               </div>
             )}
             <div
               className="mb-4 mx-auto"
               style={{
-                maxWidth: '800px',
+                maxWidth: '760px',
                 fontSize: '1.1rem',
-                lineHeight: '1.8',
-                color: '#666'
+                lineHeight: '1.9',
+                color: 'var(--color-ink)',
+                opacity: 0.85
               }}
             >
               {content.content}

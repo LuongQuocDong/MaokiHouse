@@ -51,63 +51,43 @@ const HomestayDetail = () => {
         )}
       </div>
 
-      <div className="card border-0 shadow-sm">
-        <div className="card-body">
-          <h1 className="display-5 text-primary mb-4">{homestay.title}</h1>
-          <p className="text-muted mb-4" style={{ whiteSpace: 'pre-line' }}>{homestay.description}</p>
+      <div className="elevated-card">
+        <div className="card-body p-4 p-md-5">
+          <div className="eyebrow mb-2">Homestay</div>
+          <h1 className="font-display mb-4" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.75rem)' }}>{homestay.title}</h1>
+          <p className="mb-4" style={{ whiteSpace: 'pre-line', color: 'var(--color-ink)', opacity: 0.8, lineHeight: 1.8 }}>{homestay.description}</p>
 
-          <div className="border-top pt-4">
+          <div style={{ borderTop: '1px solid var(--color-blush)' }} className="pt-4">
             <div className="row align-items-center">
               <div className="col-12 col-md-6 mb-3 mb-md-0">
-                <div className="h3 text-primary mb-0">
-                  ${homestay.price}/night
+                <div className="mb-0" style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', color: 'var(--color-primary)' }}>
+                  ${homestay.price}<span style={{ fontSize: '1rem', color: 'var(--color-ink)', opacity: 0.6 }}>/night</span>
                 </div>
               </div>
 
               <div className="col-12 col-md-6">
-                <div className="d-flex gap-3 justify-content-md-end">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                <div className="d-flex gap-3 justify-content-md-end flex-wrap">
+                  <motion.a
+                    href={homestay.airbnbLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pill-btn"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
                   >
-                    <a
-                      href={homestay.airbnbLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-danger px-4 py-2"
-                      style={{
-                        backgroundColor: '#ff385c',
-                        borderColor: '#ff385c',
-                        borderRadius: '50px',
-                        fontSize: '1.1rem',
-                        boxShadow: '0 2px 8px rgba(255, 56, 92, 0.25)',
-                        transition: 'all 0.3s ease'
-                      }}
-                    >
-                      Book on Airbnb
-                    </a>
-                  </motion.div>
+                    Book on Airbnb
+                  </motion.a>
 
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  <motion.a
+                    href={`tel:${homestay.phone}`}
+                    className="pill-btn"
+                    style={{ background: 'var(--color-primary)', color: 'var(--color-cream)' }}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
                   >
-                    <a
-                      href={`tel:${homestay.phone}`}
-                      className="btn btn-primary d-flex align-items-center gap-2 px-4 py-2"
-                      style={{
-                        borderRadius: '50px',
-                        fontSize: '1.1rem',
-                        boxShadow: '0 2px 8px rgba(13, 110, 253, 0.25)',
-                        transition: 'all 0.3s ease'
-                      }}
-                    >
-                      <i className="bi bi-telephone"></i>
-                      Call Host
-                    </a>
-                  </motion.div>
+                    <i className="bi bi-telephone"></i>
+                    Call Host
+                  </motion.a>
                 </div>
               </div>
             </div>

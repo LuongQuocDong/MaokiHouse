@@ -88,46 +88,76 @@ const Home = () => {
       <HomeCarousel />
       <Welcome />
       <div className="container">
-        <h1 className="display-4 text-primary mb-4">Our Homestays</h1>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-5"
+        >
+          <div className="eyebrow">Our Collection</div>
+          <h1 className="font-display mb-0" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>Our Homestays</h1>
+          <div className="gold-divider"><i className="bi bi-gem gold-divider-icon"></i></div>
+        </motion.div>
+
         <div className="row g-4 mb-5">
-          {homestays.map((homestay) => (
-            <div key={homestay.id} className="col-12 col-md-6 col-lg-4">
+          {homestays.map((homestay, i) => (
+            <motion.div
+              key={homestay.id}
+              className="col-12 col-md-6 col-lg-4"
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: (i % 3) * 0.12 }}
+            >
               <HomestaySlider homestay={homestay} />
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <section className="py-5" style={{ backgroundColor: '#ffe6d8' }}>
+        <section className="py-5 full-bleed" style={{ backgroundColor: 'var(--color-blush)' }}>
           <div className="container">
-            <h2 className="display-5 text-primary text-center mb-5">Guest Reviews</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.7 }}
+              className="text-center mb-5"
+            >
+              <div className="eyebrow">What Guests Say</div>
+              <h2 className="font-display mb-0" style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)' }}>Guest Reviews</h2>
+              <div className="gold-divider"><i className="bi bi-quote gold-divider-icon"></i></div>
+            </motion.div>
             <div className="row g-4">
               {reviews.map((review, index) => (
                 <div key={index} className="col-md-4">
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    whileHover={{ y: -6 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="elevated-card h-100"
+                    style={{ backgroundColor: 'var(--color-white)' }}
                   >
-                    <div className="card h-100 border-0 shadow-sm" style={{ backgroundColor: '#ffe6d8' }}>
-                      <div className="card-body">
-                        <div className="d-flex align-items-center mb-3">
-                          <img
-                            src={review.avatar}
-                            alt={review.name}
-                            className="rounded-circle me-3"
-                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                          />
-                          <div>
-                            <h5 className="mb-0">{review.name}</h5>
-                            <div className="text-muted small">{review.location}</div>
-                          </div>
+                    <div className="card-body p-4">
+                      <div className="d-flex align-items-center mb-3">
+                        <img
+                          src={review.avatar}
+                          alt={review.name}
+                          className="rounded-circle me-3"
+                          style={{ width: '50px', height: '50px', objectFit: 'cover', border: '2px solid var(--color-gold-light)' }}
+                        />
+                        <div>
+                          <h5 className="mb-0" style={{ fontSize: '1.05rem' }}>{review.name}</h5>
+                          <div className="text-muted small">{review.location}</div>
                         </div>
-                        <div className="mb-2">
-                          {'★'.repeat(review.rating)}
-                          <span className="text-muted small ms-2">{review.date}</span>
-                        </div>
-                        <p className="card-text">{review.content}</p>
                       </div>
+                      <div className="mb-2" style={{ color: 'var(--color-gold)' }}>
+                        {'★'.repeat(review.rating)}
+                        <span className="text-muted small ms-2">{review.date}</span>
+                      </div>
+                      <p className="card-text" style={{ color: 'var(--color-ink)', opacity: 0.85 }}>{review.content}</p>
                     </div>
                   </motion.div>
                 </div>

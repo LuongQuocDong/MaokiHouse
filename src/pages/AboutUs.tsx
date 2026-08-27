@@ -281,47 +281,68 @@ const AboutUs = () => {
         />
       </div>
 
-      <h1 className="display-4 text-primary mb-4">{content.mainTitle}</h1>
-      <div className="text-muted mb-4">
-        {content.mainDescription}
-      </div>
-      
-      <div className="mb-5">
-        <p>{content.introText}</p>
+      <div className="text-center mb-5">
+        <div className="eyebrow mb-3">Our Story</div>
+        <h1 className="font-display mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{content.mainTitle}</h1>
+        <div className="gold-divider"><i className="bi bi-compass gold-divider-icon"></i></div>
+        <div className="mb-0 mx-auto" style={{ maxWidth: '700px', color: 'var(--color-gold)', fontSize: '1.15rem', fontStyle: 'italic' }}>
+          {content.mainDescription}
+        </div>
       </div>
 
-      <div className="row">
-        <div className="col-md-6 mb-4">
-          <div className="card h-100 border-0 shadow-sm">
-            <div className="card-body">
-              <h3 className="h4 text-primary mb-3">{content.ourStory.title}</h3>
-              <p>{content.ourStory.content}</p>
+      <div className="mb-5 mx-auto text-center" style={{ maxWidth: '760px' }}>
+        <p className="pull-quote">{content.introText}</p>
+      </div>
+
+      <div className="row g-4">
+        <div className="col-md-6">
+          <div className="elevated-card h-100">
+            <div className="card-body p-4">
+              <h3 className="h4 mb-3" style={{ fontFamily: 'var(--font-display)' }}>{content.ourStory.title}</h3>
+              <p style={{ color: 'var(--color-ink)', opacity: 0.8 }}>{content.ourStory.content}</p>
             </div>
           </div>
         </div>
 
-        <div className="col-md-6 mb-4">
-          <div className="card h-100 border-0 shadow-sm">
-            <div className="card-body">
-              <h3 className="h4 text-primary mb-3">{content.localExperience.title}</h3>
-              <p>{content.localExperience.content}</p>
+        <div className="col-md-6">
+          <div className="elevated-card h-100">
+            <div className="card-body p-4">
+              <h3 className="h4 mb-3" style={{ fontFamily: 'var(--font-display)' }}>{content.localExperience.title}</h3>
+              <p style={{ color: 'var(--color-ink)', opacity: 0.8 }}>{content.localExperience.content}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="card border-0 shadow-sm mt-4">
-        <div className="card-body">
-          <h3 className="h4 text-primary mb-3">{content.whyChooseUs.title}</h3>
-          <ul className="list-unstyled">
+      <div className="elevated-card mt-4" style={{ background: 'var(--color-blush)' }}>
+        <div className="card-body p-4">
+          <h3 className="h4 mb-3" style={{ fontFamily: 'var(--font-display)' }}>{content.whyChooseUs.title}</h3>
+          <ul className="list-unstyled mb-0">
             {content.whyChooseUs.benefits.map((benefit, index) => (
-              <li key={index} className={index < content.whyChooseUs.benefits.length - 1 ? 'mb-3' : ''}>
-                ✓ {benefit}
+              <li
+                key={index}
+                className={`d-flex align-items-start gap-2 ${index < content.whyChooseUs.benefits.length - 1 ? 'mb-3' : ''}`}
+              >
+                <i className="bi bi-check-circle-fill mt-1" style={{ color: 'var(--color-gold)' }}></i>
+                <span style={{ color: 'var(--color-ink)', opacity: 0.85 }}>{benefit}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
+
+      <style>
+        {`
+          .pull-quote {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            line-height: 1.7;
+            color: var(--color-ink);
+            font-style: italic;
+            position: relative;
+          }
+        `}
+      </style>
     </Container>
   );
 };

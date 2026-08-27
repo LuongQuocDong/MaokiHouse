@@ -24,7 +24,10 @@ const Header = () => {
   const [user] = useAuthState(auth);
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const isHome = location.pathname === '/';
+  const transparent = isHome && !scrolled && !expanded;
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,6 +36,13 @@ const Header = () => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleLogout = async () => {
@@ -167,11 +177,7 @@ const Header = () => {
       expand="lg"
       expanded={expanded}
       onToggle={(expanded) => setExpanded(expanded)}
-      className="navbar-custom"
-      style={{
-        backgroundColor: 'var(--color-primary)',
-        marginBottom: '2rem'
-      }}
+      className={`navbar-custom ${transparent ? 'navbar-transparent' : 'navbar-solid'}`}
       as={motion.nav}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -209,7 +215,7 @@ const Header = () => {
           <motion.span
             className="navbar-toggler-icon"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(253, 242, 233, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`
+              backgroundImage: `url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='${transparent || expanded ? 'rgba(253, 246, 238, 1)' : 'rgba(43, 24, 16, 1)'}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`
             }}
             animate={expanded ? { rotate: 90 } : { rotate: 0 }}
             transition={{ duration: 0.3 }}
@@ -291,46 +297,91 @@ const Header = () => {
 
       <style>
         {`
+          .navbar-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
+            padding: 1.1rem 0;
+          }
+
+          .navbar-transparent {
+            background-color: transparent !important;
+            box-shadow: none;
+          }
+
+          .navbar-solid {
+            background-color: rgba(253, 246, 238, 0.92) !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 6px 24px rgba(43, 24, 16, 0.08);
+            padding: 0.6rem 0;
+          }
+
           .header-nav-pill {
+            position: relative;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            border: 2px solid #ffe6d8;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 1.1rem;
+            padding: 0.5rem 0.25rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
             white-space: nowrap;
           }
 
+          .header-nav-pill::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 2px;
+            background: var(--color-gold);
+            transition: width 0.3s ease;
+          }
+
+          .header-nav-pill:hover::after,
+          .header-nav-pill-active::after {
+            width: 100%;
+          }
+
+          .navbar-transparent .header-nav-pill-outline {
+            color: var(--color-cream);
+          }
+
+          .navbar-transparent .header-nav-pill-active {
+            color: var(--color-gold-light);
+          }
+
+          .navbar-solid .header-nav-pill-outline {
+            color: var(--color-ink);
+          }
+
+          .navbar-solid .header-nav-pill-active {
+            color: var(--color-primary);
+          }
+
+          .header-nav-pill-solid,
           .header-nav-pill-small {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.9rem;
+            border-radius: 999px;
+            padding: 0.55rem 1.25rem;
+            background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
+            color: var(--color-ink) !important;
+            font-weight: 600;
+            box-shadow: var(--shadow-soft);
           }
 
-          .header-nav-pill-solid {
-            background-color: #ffe6d8;
-            color: var(--color-primary);
+          .header-nav-pill-solid::after {
+            display: none;
           }
 
-          .header-nav-pill-solid:hover {
-            background-color: var(--color-primary);
-            color: #ffe6d8;
-          }
-
-          .header-nav-pill-active {
-            background-color: #ffe6d8;
-            color: var(--color-primary);
-          }
-
-          .header-nav-pill-outline {
-            background-color: transparent;
-            color: #ffe6d8;
-          }
-
-          .header-nav-pill-outline:hover {
-            background-color: rgba(255, 230, 216, 0.1);
+          .header-nav-pill-small {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.85rem;
           }
         `}
       </style>
