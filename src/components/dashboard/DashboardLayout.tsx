@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
-import { NavLink, Outlet, Link } from 'react-router-dom';
+import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
 import { Spinner } from 'react-bootstrap';
+import { motion, AnimatePresence } from 'framer-motion';
 import { auth } from '../../config/firebase';
 import {
   FaChartLine,
@@ -32,6 +33,7 @@ const NAV_ITEMS = [
 
 const DashboardLayout = () => {
   const [user] = useAuthState(auth);
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -84,7 +86,17 @@ const DashboardLayout = () => {
               </div>
             }
           >
-            <Outlet />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={location.pathname}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: 'easeInOut' }}
+              >
+                <Outlet />
+              </motion.div>
+            </AnimatePresence>
           </Suspense>
         </main>
       </div>

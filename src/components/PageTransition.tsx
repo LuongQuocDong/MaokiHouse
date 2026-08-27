@@ -9,6 +9,14 @@ interface PageTransitionProps {
 const PageTransition = ({ children }: PageTransitionProps) => {
   const location = useLocation();
 
+  // The Dashboard has its own persistent sidebar/topbar shell — animating
+  // the whole page (including the sidebar) on every nested navigation
+  // looked broken. Skip the page-level transition there; DashboardLayout
+  // fades just its own content area instead.
+  if (location.pathname.startsWith('/admin/dashboard')) {
+    return <>{children}</>;
+  }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
