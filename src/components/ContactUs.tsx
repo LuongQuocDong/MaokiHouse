@@ -1,12 +1,31 @@
 import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Card, Container, Form } from 'react-bootstrap';
+import { motion } from 'framer-motion';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebase';
 import { contentService } from '../services/contentService';
 import { uploadService } from '../services/uploadService';
 import { toast } from 'react-hot-toast';
 import type { ContactContent } from '../types';
+
+const REASONS = [
+  {
+    icon: 'bi-calendar2-check',
+    title: 'Đặt lịch demo',
+    desc: 'Xem trực tiếp cách MaokiHouse đồng bộ lịch, hộp thư và doanh thu của bạn trong một buổi demo ngắn.',
+  },
+  {
+    icon: 'bi-rocket-takeoff',
+    title: 'Đăng ký dùng thử',
+    desc: 'Bắt đầu trải nghiệm hệ thống với chính bất động sản của bạn, có đội ngũ hỗ trợ thiết lập cùng.',
+  },
+  {
+    icon: 'bi-chat-dots',
+    title: 'Tư vấn giải pháp phù hợp',
+    desc: 'Cho chúng tôi biết quy mô vận hành hiện tại, chúng tôi sẽ đề xuất gói và lộ trình triển khai phù hợp.',
+  },
+];
 
 const ContactUs = () => {
   const [user] = useAuthState(auth);
@@ -32,9 +51,9 @@ const ContactUs = () => {
           // Initialize with default content if none exists
           const defaultContent: ContactContent = {
             id: 'default',
-            content: `Bạn đang vận hành homestay, căn hộ dịch vụ hay quản lý nhiều bất động sản trên Airbnb, Booking.com, Agoda? Hãy liên hệ với chúng tôi để được tư vấn và trải nghiệm MaokiHouse — chúng tôi sẽ đồng hành cùng bạn từ những bước đầu tiên.`,
-            title: 'Liên hệ với chúng tôi',
-            subtitle: 'Chúng tôi sẵn sàng hỗ trợ Host của bạn',
+            content: `Bạn đang vận hành homestay, căn hộ dịch vụ hay quản lý nhiều bất động sản trên Airbnb, Booking.com, Agoda? Hãy để lại thông tin để đăng ký dùng thử hoặc đặt lịch demo — đội ngũ MaokiHouse sẽ liên hệ tư vấn giải pháp phù hợp với quy mô vận hành của bạn, và đồng hành cùng bạn từ những bước thiết lập đầu tiên.`,
+            title: 'Đăng ký dùng thử MaokiHouse',
+            subtitle: 'Đặt lịch demo hoặc để lại lời nhắn — chúng tôi phản hồi trong thời gian sớm nhất',
             updatedAt: Date.now(),
           };
           setContent(defaultContent);
@@ -110,11 +129,13 @@ const ContactUs = () => {
 
   if (loading) {
     return (
-      <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: 'var(--color-blush)' }}>
-        <Card.Body className="p-4 text-center">
-          Loading...
-        </Card.Body>
-      </Card>
+      <Container className="py-5">
+        <Card className="border-0 shadow-sm mb-5" style={{ backgroundColor: 'var(--color-blush)' }}>
+          <Card.Body className="p-4 text-center">
+            Loading...
+          </Card.Body>
+        </Card>
+      </Container>
     );
   }
 
@@ -123,8 +144,42 @@ const ContactUs = () => {
   }
 
   return (
-    <Card className="border-0 mb-5 welcome-card" style={{ backgroundColor: 'var(--color-cream)' }}>
-      <Card.Body className="p-4 p-md-5">
+    <Container className="py-5">
+      <div className="text-center mb-5">
+        <div className="eyebrow">Bắt đầu với MaokiHouse</div>
+        <h1 className="font-display mb-3" style={{ fontSize: 'clamp(1.9rem, 3.8vw, 2.75rem)' }}>
+          Sẵn sàng vận hành gọn gàng hơn?
+        </h1>
+        <div className="gold-divider"><i className="bi bi-envelope-heart gold-divider-icon"></i></div>
+        <p className="mx-auto" style={{ maxWidth: 640, color: 'var(--color-ink)', opacity: 0.8 }}>
+          Dù bạn đang cân nhắc dùng thử hay muốn xem một buổi demo trước, hãy để lại thông tin bên dưới — chúng tôi
+          sẽ liên hệ để tìm hiểu nhu cầu vận hành và đề xuất giải pháp phù hợp cho bạn.
+        </p>
+      </div>
+
+      <div className="row g-4 mb-5">
+        {REASONS.map((r, i) => (
+          <motion.div
+            key={r.title}
+            className="col-md-4"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+          >
+            <div className="elevated-card h-100">
+              <div className="card-body p-4 text-center">
+                <i className={`bi ${r.icon} mb-3`} style={{ fontSize: '1.75rem', color: 'var(--color-primary)' }}></i>
+                <h3 className="h6 mb-2">{r.title}</h3>
+                <p className="small mb-0" style={{ color: 'var(--color-ink)', opacity: 0.8 }}>{r.desc}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <Card className="border-0 mb-4 welcome-card" style={{ backgroundColor: 'var(--color-cream)' }}>
+        <Card.Body className="p-4 p-md-5">
         {isEditing && user ? (
           <>
             <Form.Group className="mb-3">
@@ -236,7 +291,14 @@ const ContactUs = () => {
           </div>
         )}
       </Card.Body>
-    </Card>
+      </Card>
+
+      <div className="text-center mt-2">
+        <p className="small mb-0" style={{ color: 'var(--color-ink)', opacity: 0.65 }}>
+          Bạn có thể liên hệ trực tiếp qua các kênh dưới đây — chúng tôi thường phản hồi trong ngày làm việc.
+        </p>
+      </div>
+    </Container>
   );
 };
 

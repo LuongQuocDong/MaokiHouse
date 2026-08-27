@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Form, Button, Spinner } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebase';
@@ -80,24 +81,26 @@ const AboutUs = () => {
           const defaultContent: AboutUsContent = {
             id: 'about-us',
             mainTitle: 'Về MaokiHouse',
-            mainDescription: 'Nền tảng channel-manager và PMS được xây dựng bởi những người từng vận hành homestay.',
-            introText: 'MaokiHouse ra đời từ chính hành trình vận hành một homestay tại Sài Gòn — nơi chúng tôi hiểu rõ nỗi đau của việc quản lý lịch trên nhiều nền tảng, trả lời tin nhắn khách từ nhiều app, và tổng hợp doanh thu thủ công mỗi cuối tháng. Chúng tôi xây dựng MaokiHouse để giải quyết chính những vấn đề đó cho các Host khác.',
+            mainDescription: 'Nền tảng channel-manager và PMS được xây dựng bởi những người từng vận hành homestay và căn hộ cho thuê.',
+            introText: 'MaokiHouse ra đời từ chính hành trình vận hành một homestay tại Sài Gòn — nơi chúng tôi hiểu rõ nỗi đau của việc quản lý lịch trên nhiều nền tảng, trả lời tin nhắn khách từ nhiều app khác nhau, và tổng hợp doanh thu thủ công mỗi cuối tháng bằng file Excel. Mỗi ngày trôi qua trong tình trạng đó đều là rủi ro: một lịch trùng có thể khiến bạn mất khách và mất uy tín trên nền tảng, một tin nhắn bị bỏ lỡ có thể khiến khách hủy đặt phòng. Chúng tôi xây dựng MaokiHouse để giải quyết chính những vấn đề đó — không phải trên lý thuyết, mà từ những gì chúng tôi từng tự tay xử lý mỗi ngày.',
             ourStory: {
               title: 'Câu chuyện của chúng tôi',
-              content: 'Từ một homestay nhỏ tại Sài Gòn, đội ngũ MaokiHouse đã trải qua toàn bộ hành trình làm Host — từ đón khách, xử lý booking trùng lịch, đến báo cáo doanh thu. Chúng tôi chuyển hóa kinh nghiệm đó thành một sản phẩm phần mềm dành cho cộng đồng Host.'
+              content: 'Từ một homestay nhỏ tại Sài Gòn, đội ngũ MaokiHouse đã trải qua toàn bộ hành trình làm Host — từ đón khách lúc nửa đêm, xử lý booking trùng lịch giữa Airbnb và Booking.com, đến việc ngồi cộng lại doanh thu từng đơn vào cuối tháng. Càng vận hành nhiều bất động sản, những công việc thủ công đó càng chiếm thời gian và càng dễ sai sót. Chúng tôi bắt đầu tự xây dựng công cụ nội bộ để giải quyết vấn đề của chính mình, và nhận ra rất nhiều Host khác cũng đang gặp đúng những khó khăn tương tự. Đó là lý do MaokiHouse trở thành một sản phẩm phần mềm dành cho cả cộng đồng Host, Property Manager và đội ngũ Cohost.'
             },
             localExperience: {
               title: 'Hiểu vận hành thực tế',
-              content: 'Không phải một sản phẩm được thiết kế trên giấy — MaokiHouse được xây dựng dựa trên quy trình vận hành thực tế: đồng bộ lịch, quản lý nhân sự, theo dõi doanh thu và giao tiếp với khách hàng mỗi ngày.'
+              content: 'Không phải một sản phẩm được thiết kế trên giấy bởi người chưa từng đón một vị khách nào — MaokiHouse được xây dựng dựa trên quy trình vận hành thực tế mà chúng tôi trải qua mỗi ngày: đồng bộ lịch để tránh trùng đặt phòng, quản lý nhân sự dọn phòng và lễ tân, theo dõi doanh thu theo từng bất động sản, và giao tiếp với khách hàng đúng lúc, đúng kênh. Mỗi tính năng trong MaokiHouse đều xuất phát từ một tình huống vận hành có thật, không phải từ một danh sách tính năng lý tưởng.'
             },
             whyChooseUs: {
               title: 'Vì sao chọn MaokiHouse?',
               benefits: [
-                'Đồng bộ lịch đa kênh Airbnb / Booking.com / Agoda',
-                'Hộp thư khách hàng hợp nhất',
-                'Quản lý vận hành PMS đầy đủ: CI/CO, dịch vụ, thanh toán',
-                'Báo cáo doanh thu và chi phí minh bạch',
-                'Được xây dựng bởi người từng làm Host, hiểu đúng nhu cầu'
+                'Đồng bộ lịch đa kênh Airbnb / Booking.com / Agoda, tự động tính khả dụng để tránh trùng lịch',
+                'Hộp thư khách hàng hợp nhất, không bỏ lỡ tin nhắn từ bất kỳ nền tảng nào',
+                'Quản lý vận hành PMS đầy đủ: check-in/check-out, hồ sơ khách, bán dịch vụ, thanh toán',
+                'Báo cáo doanh thu và chi phí minh bạch theo từng bất động sản, từng tháng',
+                'Quản lý nhân sự và phân quyền rõ ràng cho đội ngũ vận hành hoặc Cohost',
+                'Được xây dựng bởi người từng làm Host, hiểu đúng nhu cầu vận hành thực tế',
+                'Đội ngũ hỗ trợ đồng hành trong suốt quá trình thiết lập và sử dụng'
               ]
             }
           };
@@ -294,6 +297,52 @@ const AboutUs = () => {
         <p className="pull-quote">{content.introText}</p>
       </div>
 
+      {/* Problem / mission section */}
+      <div className="mb-5">
+        <div className="text-center mb-4">
+          <div className="eyebrow mb-2">Vấn đề chúng tôi giải quyết</div>
+          <h2 className="h3" style={{ fontFamily: 'var(--font-display)' }}>Vận hành cho thuê không nên phức tạp đến vậy</h2>
+        </div>
+        <div className="row g-4">
+          <div className="col-md-4">
+            <div className="elevated-card h-100">
+              <div className="card-body p-4">
+                <i className="bi bi-calendar-x mb-3" style={{ fontSize: '1.75rem', color: 'var(--color-primary)' }}></i>
+                <h4 className="h5 mb-2">Trùng lịch giữa các kênh</h4>
+                <p className="small mb-0" style={{ color: 'var(--color-ink)', opacity: 0.8 }}>
+                  Khi lịch không được đồng bộ, một phòng có thể được đặt hai lần trên hai nền tảng khác nhau — dẫn đến
+                  huỷ booking, đánh giá xấu và mất niềm tin từ khách.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="elevated-card h-100">
+              <div className="card-body p-4">
+                <i className="bi bi-chat-square-dots mb-3" style={{ fontSize: '1.75rem', color: 'var(--color-primary)' }}></i>
+                <h4 className="h5 mb-2">Tin nhắn khách bị bỏ lỡ</h4>
+                <p className="small mb-0" style={{ color: 'var(--color-ink)', opacity: 0.8 }}>
+                  Khách hỏi thông tin trên Airbnb, kênh khác lại nhắn qua Booking.com — Host phải mở nhiều app cùng
+                  lúc và rất dễ trả lời trễ, ảnh hưởng đến tỉ lệ phản hồi và xếp hạng.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="elevated-card h-100">
+              <div className="card-body p-4">
+                <i className="bi bi-file-earmark-spreadsheet mb-3" style={{ fontSize: '1.75rem', color: 'var(--color-primary)' }}></i>
+                <h4 className="h5 mb-2">Doanh thu rời rạc, khó tổng hợp</h4>
+                <p className="small mb-0" style={{ color: 'var(--color-ink)', opacity: 0.8 }}>
+                  Mỗi nền tảng có một bảng sao kê riêng, định dạng riêng — việc tổng hợp doanh thu và chi phí thủ công
+                  mỗi tháng vừa tốn thời gian, vừa dễ sai lệch số liệu.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="row g-4">
         <div className="col-md-6">
           <div className="elevated-card h-100">
@@ -329,6 +378,21 @@ const AboutUs = () => {
             ))}
           </ul>
         </div>
+      </div>
+
+      <div className="text-center mt-5 pt-3">
+        <div className="eyebrow mb-2">Sứ mệnh</div>
+        <h3 className="h4 mx-auto mb-3" style={{ fontFamily: 'var(--font-display)', maxWidth: 640 }}>
+          Giúp mọi Host vận hành chuyên nghiệp như một đội ngũ lớn, dù chỉ quản lý một căn hộ
+        </h3>
+        <p className="mx-auto mb-4" style={{ maxWidth: 640, color: 'var(--color-ink)', opacity: 0.8 }}>
+          Chúng tôi tin rằng công cụ vận hành tốt không nên chỉ dành riêng cho các chuỗi khách sạn lớn. Mục tiêu của
+          MaokiHouse là mang lại cho mọi Host — dù mới bắt đầu với một căn hộ hay đang quản lý cả một danh mục bất
+          động sản — một hệ thống đủ mạnh để vận hành gọn gàng, minh bạch và có thể mở rộng theo thời gian.
+        </p>
+        <Link to="/contact" className="pill-btn">
+          Liên hệ đăng ký dùng thử <i className="bi bi-arrow-right"></i>
+        </Link>
       </div>
 
       <style>
