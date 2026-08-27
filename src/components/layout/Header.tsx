@@ -215,7 +215,7 @@ const Header = () => {
           <motion.span
             className="navbar-toggler-icon"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='${transparent || expanded ? 'rgba(253, 246, 238, 1)' : 'rgba(43, 24, 16, 1)'}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`
+              backgroundImage: `url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(253, 246, 238, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`
             }}
             animate={expanded ? { rotate: 90 } : { rotate: 0 }}
             transition={{ duration: 0.3 }}
@@ -313,10 +313,10 @@ const Header = () => {
           }
 
           .navbar-solid {
-            background-color: rgba(253, 246, 238, 0.92) !important;
+            background-color: rgba(28, 19, 16, 0.92) !important;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 6px 24px rgba(43, 24, 16, 0.08);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
             padding: 0.6rem 0;
           }
 
@@ -358,11 +358,11 @@ const Header = () => {
           }
 
           .navbar-solid .header-nav-pill-outline {
-            color: var(--color-ink);
+            color: var(--color-cream);
           }
 
           .navbar-solid .header-nav-pill-active {
-            color: var(--color-primary);
+            color: var(--color-gold-light);
           }
 
           .header-nav-pill-solid,
