@@ -178,3 +178,10 @@ a:hover {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
+
+/* The hero carousel is the first thing on the Home page; cancel out
+   <main>'s top padding so the image reaches all the way to the top of
+   the viewport, behind the transparent fixed header (no cream gap). */
+.hero-carousel.full-bleed {
+  margin-top: -1.5rem;
+}
