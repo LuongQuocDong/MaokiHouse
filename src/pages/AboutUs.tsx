@@ -17,18 +17,18 @@ const AboutUs = () => {
   const carouselImages: ImageCarouselImage[] = [
     {
       url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1710681298/about1_w6kort.jpg',
-      alt: 'Local Experience',
-      caption: 'Experience Saigon Like a Local'
+      alt: 'Host dashboard',
+      caption: 'Quản lý vận hành tập trung'
     },
     {
       url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1710681298/about2_av5b0h.jpg',
-      alt: 'City Tours',
-      caption: 'Discover Hidden Gems'
+      alt: 'Multi-channel sync',
+      caption: 'Đồng bộ đa kênh OTA'
     },
     {
       url: 'https://res.cloudinary.com/dlkejgkqk/image/upload/v1710681299/about3_vkv07l.jpg',
-      alt: 'Cultural Exchange',
-      caption: 'Cultural Exchange'
+      alt: 'Revenue reporting',
+      caption: 'Báo cáo doanh thu rõ ràng'
     }
   ];
 
@@ -79,25 +79,25 @@ const AboutUs = () => {
           // If no content exists, save the default content
           const defaultContent: AboutUsContent = {
             id: 'about-us',
-            mainTitle: 'Travel with local youth',
-            mainDescription: 'We love wandering around, talking, sharing things about our lovely Saigon.',
-            introText: 'As your local companion, we take you on free walking street tours where we can tell you hundreds littles things about the city of Saigon, listening to all the things you have to say about your country. We learn from the stories that we have been told and our tour guides pass on knowledge from there henceforth. That is what we have aimed to gain and done for the last 15 years.',
+            mainTitle: 'Về MaokiHouse',
+            mainDescription: 'Nền tảng channel-manager và PMS được xây dựng bởi những người từng vận hành homestay.',
+            introText: 'MaokiHouse ra đời từ chính hành trình vận hành một homestay tại Sài Gòn — nơi chúng tôi hiểu rõ nỗi đau của việc quản lý lịch trên nhiều nền tảng, trả lời tin nhắn khách từ nhiều app, và tổng hợp doanh thu thủ công mỗi cuối tháng. Chúng tôi xây dựng MaokiHouse để giải quyết chính những vấn đề đó cho các Host khác.',
             ourStory: {
-              title: 'Our Story',
-              content: 'Having once worked as a volunteer tour guide in Ho Chi Minh City, we\'ve spent years exploring its hidden corners, charming stories, and unique culture. We know what travelers seek – the small things that make a trip special.'
+              title: 'Câu chuyện của chúng tôi',
+              content: 'Từ một homestay nhỏ tại Sài Gòn, đội ngũ MaokiHouse đã trải qua toàn bộ hành trình làm Host — từ đón khách, xử lý booking trùng lịch, đến báo cáo doanh thu. Chúng tôi chuyển hóa kinh nghiệm đó thành một sản phẩm phần mềm dành cho cộng đồng Host.'
             },
             localExperience: {
-              title: 'Local Experience',
-              content: 'Whether it\'s a tucked-away café, a quiet alley filled with local art, or stories of old Saigon, we\'re here to share it with you. Our homestay is more than just accommodation – it\'s your gateway to authentic Saigon experiences.'
+              title: 'Hiểu vận hành thực tế',
+              content: 'Không phải một sản phẩm được thiết kế trên giấy — MaokiHouse được xây dựng dựa trên quy trình vận hành thực tế: đồng bộ lịch, quản lý nhân sự, theo dõi doanh thu và giao tiếp với khách hàng mỗi ngày.'
             },
             whyChooseUs: {
-              title: 'Why Choose Maoki House?',
+              title: 'Vì sao chọn MaokiHouse?',
               benefits: [
-                'Local insights and personalized recommendations',
-                'Central location in the heart of Saigon',
-                'Comfortable and authentic homestay experience',
-                'Friendly hosts with extensive local knowledge',
-                'Access to hidden gems and local favorites'
+                'Đồng bộ lịch đa kênh Airbnb / Booking.com / Agoda',
+                'Hộp thư khách hàng hợp nhất',
+                'Quản lý vận hành PMS đầy đủ: CI/CO, dịch vụ, thanh toán',
+                'Báo cáo doanh thu và chi phí minh bạch',
+                'Được xây dựng bởi người từng làm Host, hiểu đúng nhu cầu'
               ]
             }
           };
@@ -126,7 +126,7 @@ const AboutUs = () => {
       const saved = await contentService.put(idToken, 'about-us', {
         ...content,
         updatedAt: Date.now(),
-        updatedBy: user.email
+        updatedBy: user.email ?? undefined
       });
       setContent(saved);
       setIsEditing(false);

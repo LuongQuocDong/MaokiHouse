@@ -21,6 +21,9 @@ const AppRoutes = () => {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Pages.Home />} />
             <Route path="/about" element={<Pages.AboutUs />} />
+            <Route path="/features" element={<Pages.Features />} />
+            <Route path="/pricing" element={<Pages.Pricing />} />
+            <Route path="/services" element={<Pages.Services />} />
             <Route path="/contact" element={<Pages.ContactUs />} />
             <Route path="/detail/:id" element={<Pages.HomestayDetail />} />
             <Route path="/admin" element={<Pages.AdminLogin />} />
@@ -28,10 +31,20 @@ const AppRoutes = () => {
               path="/admin/dashboard"
               element={
                 <ProtectedRoute>
-                  <Pages.AdminDashboard />
+                  <Pages.DashboardLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<Pages.DashboardOverview />} />
+              <Route path="properties" element={<Pages.DashboardProperties />} />
+              <Route path="bookings" element={<Pages.DashboardBookings />} />
+              <Route path="calendar" element={<Pages.DashboardCalendar />} />
+              <Route path="messages" element={<Pages.DashboardMessages />} />
+              <Route path="revenue" element={<Pages.DashboardRevenue />} />
+              <Route path="hr" element={<Pages.DashboardHR />} />
+              <Route path="ai-support" element={<Pages.DashboardAISupport />} />
+              <Route path="channels" element={<Pages.DashboardChannels />} />
+            </Route>
           </Routes>
         </PageTransition>
       </Suspense>

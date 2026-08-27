@@ -32,9 +32,9 @@ const ContactUs = () => {
           // Initialize with default content if none exists
           const defaultContent: ContactContent = {
             id: 'default',
-            content: `Feel free to reach out to us for any inquiries about our homestay or tours. We're here to make your stay in Saigon memorable!`,
-            title: 'Get in Touch',
-            subtitle: "We'd love to hear from you",
+            content: `Bạn đang vận hành homestay, căn hộ dịch vụ hay quản lý nhiều bất động sản trên Airbnb, Booking.com, Agoda? Hãy liên hệ với chúng tôi để được tư vấn và trải nghiệm MaokiHouse — chúng tôi sẽ đồng hành cùng bạn từ những bước đầu tiên.`,
+            title: 'Liên hệ với chúng tôi',
+            subtitle: 'Chúng tôi sẵn sàng hỗ trợ Host của bạn',
             updatedAt: Date.now(),
           };
           setContent(defaultContent);
