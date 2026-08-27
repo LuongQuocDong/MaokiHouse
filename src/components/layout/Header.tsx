@@ -9,7 +9,7 @@ import { CONTACT_LINKS } from '../../constants/contact';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiLogOut } from 'react-icons/bi';
-import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome, FaCalendarAlt } from 'react-icons/fa';
+import { FaInfoCircle, FaEnvelope, FaChartBar, FaHome, FaCalendarAlt, FaListUl, FaTags, FaConciergeBell } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 
 interface NavButtonProps {
@@ -249,6 +249,18 @@ const Header = () => {
                     </motion.div>
 
                     <motion.div variants={mobileNavLinkVariants}>
+                      <NavButton to="/features" icon={FaListUl} mobile>Features</NavButton>
+                    </motion.div>
+
+                    <motion.div variants={mobileNavLinkVariants}>
+                      <NavButton to="/pricing" icon={FaTags} mobile>Pricing</NavButton>
+                    </motion.div>
+
+                    <motion.div variants={mobileNavLinkVariants}>
+                      <NavButton to="/services" icon={FaConciergeBell} mobile>Services</NavButton>
+                    </motion.div>
+
+                    <motion.div variants={mobileNavLinkVariants}>
                       <NavButton to="/contact" icon={FaEnvelope} mobile>Contact Us</NavButton>
                     </motion.div>
 
@@ -280,6 +292,9 @@ const Header = () => {
                 >
                   <NavButton to="/" icon={FaHome}>Home</NavButton>
                   <NavButton to="/about" icon={FaInfoCircle}>About Us</NavButton>
+                  <NavButton to="/features" icon={FaListUl}>Features</NavButton>
+                  <NavButton to="/pricing" icon={FaTags}>Pricing</NavButton>
+                  <NavButton to="/services" icon={FaConciergeBell}>Services</NavButton>
                   <NavButton to="/contact" icon={FaEnvelope}>Contact Us</NavButton>
                   <NavButton to={CONTACT_LINKS.airbnb} icon={FaCalendarAlt} external>Book Now</NavButton>
                   {user && (

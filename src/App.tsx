@@ -8,6 +8,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import ContactPanel from './components/ContactPanel';
 import PageTransition from './components/PageTransition';
 import LoadingSpinner from './components/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Suspense } from 'react';
 import * as Pages from './pages';
 
@@ -28,6 +29,9 @@ const AppRoutes = () => {
           <Routes location={location} key={routeKey}>
             <Route path="/" element={<Pages.Home />} />
             <Route path="/about" element={<Pages.AboutUs />} />
+            <Route path="/features" element={<Pages.Features />} />
+            <Route path="/pricing" element={<Pages.Pricing />} />
+            <Route path="/services" element={<Pages.Services />} />
             <Route path="/contact" element={<Pages.ContactUs />} />
             <Route path="/detail/:id" element={<Pages.HomestayDetail />} />
             <Route path="/admin" element={<Pages.AdminLogin />} />
@@ -64,7 +68,9 @@ function App() {
         <Header />
         <main className="flex-grow-1 py-4">
           <Container>
-            <AppRoutes />
+            <ErrorBoundary>
+              <AppRoutes />
+            </ErrorBoundary>
           </Container>
         </main>
         <Footer />
