@@ -9,7 +9,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { auth } from '../src/config/firebase';
+import { auth } from '../api/_lib/config/firebase';
 
 async function main() {
   const arg = process.argv[2];
