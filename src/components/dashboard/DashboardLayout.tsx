@@ -121,9 +121,8 @@ const DashboardLayout = () => {
             padding: 1.5rem 1rem;
             position: sticky;
             top: 0;
-            align-self: flex-start;
-            height: 100vh;
-            overflow-y: auto;
+            align-self: stretch;
+            min-height: 100vh;
           }
 
           .dashboard-logo {
