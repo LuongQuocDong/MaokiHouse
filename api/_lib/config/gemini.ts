@@ -19,20 +19,23 @@ const SYSTEM_PROMPT =
   'Bạn là trợ lý AI hỗ trợ chủ nhà (host) quản lý homestay MaokiHouse tại Sài Gòn. ' +
   'Trả lời ngắn gọn, thực tế, bằng tiếng Việt. Bạn có thể giúp soạn phản hồi cho khách, ' +
   'gợi ý cách xử lý tình huống vận hành, tóm tắt thông tin, hoặc tư vấn chung về quản lý cho thuê ngắn hạn. ' +
-  'Nếu được hỏi về số liệu cụ thể (doanh thu, booking...) mà bạn không có dữ liệu thật, hãy nói rõ là bạn không có quyền truy cập số liệu đó thay vì bịa ra.';
+  'Bạn được cung cấp dữ liệu thực tế của hệ thống (phòng, booking, doanh thu, tin nhắn) ở dưới — hãy dùng đúng dữ liệu đó khi được hỏi, ' +
+  'không bịa số liệu không có trong dữ liệu được cung cấp.';
 
-export async function generateGeminiReply(history: GeminiChatMessage[]): Promise<string> {
+export async function generateGeminiReply(history: GeminiChatMessage[], systemContext?: string): Promise<string> {
   if (!GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY is not configured on the server');
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 
+  const fullSystemPrompt = systemContext ? `${SYSTEM_PROMPT}\n\n${systemContext}` : SYSTEM_PROMPT;
+
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      systemInstruction: { parts: [{ text: fullSystemPrompt }] },
       contents: history.map((m) => ({ role: m.role, parts: [{ text: m.text }] })),
     }),
   });

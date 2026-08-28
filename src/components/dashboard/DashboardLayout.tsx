@@ -100,7 +100,9 @@ const DashboardLayout = () => {
       <style>
         {`
           .dashboard-shell {
-            display: flex;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            align-items: stretch;
             min-height: 100vh;
             margin-top: -1.5rem;
             margin-bottom: -1.5rem;
@@ -108,8 +110,6 @@ const DashboardLayout = () => {
           }
 
           .dashboard-sidebar {
-            width: 260px;
-            flex-shrink: 0;
             background-color: #100b09;
             background-image:
               url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a15a' stroke-width='1' opacity='0.07'%3E%3Cpath d='M60 20c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M60 72c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M20 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Cpath d='M72 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Ccircle cx='60' cy='60' r='6'/%3E%3Cpath d='M40 40c11 0 20 9 20 20-11 0-20-9-20-20z'/%3E%3Cpath d='M80 40c-11 0-20 9-20 20 11 0 20-9 20-20z'/%3E%3Cpath d='M40 80c11 0 20-9 20-20-11 0-20 9-20 20z'/%3E%3Cpath d='M80 80c-11 0-20-9-20-20 11 0 20 9 20 20z'/%3E%3C/g%3E%3C/svg%3E");
@@ -119,7 +119,6 @@ const DashboardLayout = () => {
             display: flex;
             flex-direction: column;
             padding: 1.5rem 1rem;
-            min-height: 100vh;
           }
 
           .dashboard-nav {
@@ -215,12 +214,9 @@ const DashboardLayout = () => {
 
           @media (max-width: 900px) {
             .dashboard-shell {
-              flex-direction: column;
+              grid-template-columns: 1fr;
             }
             .dashboard-sidebar {
-              width: 100%;
-              height: auto;
-              position: relative;
               flex-direction: row;
               flex-wrap: wrap;
               align-items: center;
@@ -228,6 +224,8 @@ const DashboardLayout = () => {
             .dashboard-nav {
               flex-direction: row;
               flex-wrap: wrap;
+              position: static;
+              padding-top: 0;
             }
           }
         `}
