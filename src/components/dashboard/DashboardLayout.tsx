@@ -99,29 +99,30 @@ const DashboardLayout = () => {
 
       <style>
         {`
+          /* The dark/textured background lives on the SHELL (the shared
+             parent), not on the sidebar box itself — the shell's height is
+             always exactly right by definition (it's the parent), so there
+             is no separate box to keep in sync with the content column's
+             height. The main content column simply paints its own opaque
+             cream background on top, covering everything except the left
+             260px "sidebar" strip. This also stays in normal document flow
+             (no position:fixed), so it never overlaps the Footer. */
           .dashboard-shell {
+            display: flex;
             min-height: 100vh;
             margin-top: -1.5rem;
             margin-bottom: -1.5rem;
-            background: var(--color-cream);
-          }
-
-          .dashboard-sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 260px;
-            height: 100vh;
-            z-index: 20;
-            overflow-y: auto;
             background-color: #100b09;
             background-image:
               url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a15a' stroke-width='1' opacity='0.07'%3E%3Cpath d='M60 20c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M60 72c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M20 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Cpath d='M72 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Ccircle cx='60' cy='60' r='6'/%3E%3Cpath d='M40 40c11 0 20 9 20 20-11 0-20-9-20-20z'/%3E%3Cpath d='M80 40c-11 0-20 9-20 20 11 0 20-9 20-20z'/%3E%3Cpath d='M40 80c11 0 20-9 20-20-11 0-20 9-20 20z'/%3E%3Cpath d='M80 80c-11 0-20-9-20-20 11 0 20 9 20 20z'/%3E%3C/g%3E%3C/svg%3E");
             background-size: 150px 150px;
             background-repeat: repeat;
+          }
+
+          .dashboard-sidebar {
+            width: 260px;
+            flex-shrink: 0;
             color: var(--color-cream);
-            display: flex;
-            flex-direction: column;
             padding: 1.5rem 1rem;
           }
 
@@ -130,6 +131,8 @@ const DashboardLayout = () => {
             flex-direction: column;
             gap: 0.25rem;
             padding-top: 4.5rem;
+            position: sticky;
+            top: 1.5rem;
           }
 
           .dashboard-nav-link {
@@ -159,11 +162,11 @@ const DashboardLayout = () => {
           }
 
           .dashboard-main {
-            margin-left: 260px;
+            flex: 1;
             min-width: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            background: var(--color-cream);
           }
 
           .dashboard-topbar {
@@ -216,21 +219,17 @@ const DashboardLayout = () => {
           }
 
           @media (max-width: 900px) {
-            .dashboard-sidebar {
-              position: static;
-              width: 100%;
-              height: auto;
-              flex-direction: row;
-              flex-wrap: wrap;
-              align-items: center;
+            .dashboard-shell {
+              flex-direction: column;
             }
-            .dashboard-main {
-              margin-left: 0;
+            .dashboard-sidebar {
+              width: 100%;
             }
             .dashboard-nav {
               flex-direction: row;
               flex-wrap: wrap;
               padding-top: 0;
+              position: static;
             }
           }
         `}
