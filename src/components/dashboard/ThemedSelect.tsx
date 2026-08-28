@@ -27,6 +27,10 @@ const ThemedSelect = ({ value, onChange, options, style, className }: ThemedSele
     const instance = new TomSelect(selectRef.current, {
       controlInput: null,
       allowEmptyOption: true,
+      // Render the open dropdown in <body> instead of in-place — several
+      // dashboard cards use `overflow: hidden` for their rounded corners,
+      // which was clipping the dropdown instead of letting it float above.
+      dropdownParent: 'body',
       onChange: (val) => onChangeRef.current(String(val)),
     });
     tomRef.current = instance;
