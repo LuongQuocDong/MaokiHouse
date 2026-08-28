@@ -8,6 +8,7 @@ import { propertyService } from '../../services/propertyService';
 import type { Booking, BookingSource, BookingStatus, Property } from '../../types';
 import ThemedSelect from '../../components/dashboard/ThemedSelect';
 import ThemedDatePicker from '../../components/dashboard/ThemedDatePicker';
+import { useConfirm } from '../../components/dashboard/ConfirmDialog';
 
 const STATUS_OPTIONS: { value: BookingStatus; label: string }[] = [
   { value: 'confirmed', label: 'Đã xác nhận' },
@@ -46,6 +47,7 @@ const emptyForm = {
 };
 
 const Bookings = () => {
+  const confirm = useConfirm();
   const [user] = useAuthState(auth);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -140,7 +142,7 @@ const Bookings = () => {
 
   const handleDelete = async (b: Booking) => {
     if (!user) return;
-    if (!window.confirm(`Xóa đặt phòng của ${b.guestName}?`)) return;
+    if (!(await confirm(`Xóa đặt phòng của ${b.guestName}?`, { danger: true, confirmLabel: 'Xóa' }))) return;
     try {
       const idToken = await user.getIdToken();
       await bookingService.remove(idToken, b.id);

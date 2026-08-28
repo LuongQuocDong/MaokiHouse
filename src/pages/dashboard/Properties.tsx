@@ -6,6 +6,7 @@ import { auth } from '../../config/firebase';
 import { homestayService } from '../../services/homestayService';
 import { uploadService } from '../../services/uploadService';
 import type { Homestay } from '../../types';
+import { useConfirm } from '../../components/dashboard/ConfirmDialog';
 
 interface FormState {
   title: string;
@@ -19,6 +20,7 @@ interface FormState {
 const initialForm: FormState = { title: '', description: '', price: '', airbnbLink: '', phone: '', images: [] };
 
 const Properties = () => {
+  const confirm = useConfirm();
   const [user] = useAuthState(auth);
   const [homestays, setHomestays] = useState<Homestay[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,7 +102,7 @@ const Properties = () => {
 
   const handleDelete = async (homestay: Homestay) => {
     if (!user) return;
-    if (!window.confirm(`Xóa phòng "${homestay.title}"?`)) return;
+    if (!(await confirm(`Xóa phòng "${homestay.title}"?`, { danger: true, confirmLabel: 'Xóa' }))) return;
     try {
       const idToken = await user.getIdToken();
       await homestayService.remove(idToken, homestay.id);

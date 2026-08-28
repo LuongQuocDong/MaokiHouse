@@ -8,6 +8,7 @@ import { revenueService } from '../../services/revenueService';
 import type { RevenueEntry, RevenueEntryType } from '../../types';
 import ThemedSelect from '../../components/dashboard/ThemedSelect';
 import ThemedDatePicker from '../../components/dashboard/ThemedDatePicker';
+import { useConfirm } from '../../components/dashboard/ConfirmDialog';
 
 const TYPE_LABELS: Record<RevenueEntryType, string> = {
   booking_payout: 'Thanh toán đặt phòng',
@@ -24,6 +25,7 @@ const TYPE_OPTIONS: { value: RevenueEntryType; label: string }[] = [
 const emptyForm = { type: 'booking_payout' as RevenueEntryType, amount: '', description: '', date: new Date().toISOString().slice(0, 10) };
 
 const Revenue = () => {
+  const confirm = useConfirm();
   const [user] = useAuthState(auth);
   const [entries, setEntries] = useState<RevenueEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +75,7 @@ const Revenue = () => {
 
   const handleDelete = async (entry: RevenueEntry) => {
     if (!user) return;
-    if (!window.confirm('Xóa mục này?')) return;
+    if (!(await confirm('Xóa mục này?', { danger: true, confirmLabel: 'Xóa' }))) return;
     try {
       const idToken = await user.getIdToken();
       await revenueService.remove(idToken, entry.id);

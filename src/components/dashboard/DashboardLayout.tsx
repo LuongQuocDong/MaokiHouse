@@ -18,6 +18,7 @@ import {
   FaPlug,
 } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
+import { ConfirmDialogProvider } from './ConfirmDialog';
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Tổng quan', icon: FaChartLine, end: true },
@@ -46,6 +47,7 @@ const DashboardLayout = () => {
   };
 
   return (
+    <ConfirmDialogProvider>
     <div className="dashboard-shell full-bleed">
       <aside className="dashboard-sidebar">
         <nav className="dashboard-nav">
@@ -236,6 +238,7 @@ const DashboardLayout = () => {
         `}
       </style>
     </div>
+    </ConfirmDialogProvider>
   );
 };
 

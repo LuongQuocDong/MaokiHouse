@@ -6,6 +6,7 @@ import { auth } from '../../config/firebase';
 import { employeeService } from '../../services/employeeService';
 import type { Employee } from '../../types';
 import ThemedSelect from '../../components/dashboard/ThemedSelect';
+import { useConfirm } from '../../components/dashboard/ConfirmDialog';
 
 const STATUS_OPTIONS = [
   { value: 'active', label: 'Hoạt động' },
@@ -15,6 +16,7 @@ const STATUS_OPTIONS = [
 const emptyForm = { name: '', role: '', email: '', phone: '', status: 'active' as 'active' | 'inactive' };
 
 const HR = () => {
+  const confirm = useConfirm();
   const [user] = useAuthState(auth);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ const HR = () => {
 
   const handleDelete = async (emp: Employee) => {
     if (!user) return;
-    if (!window.confirm(`Xóa nhân sự "${emp.name}"?`)) return;
+    if (!(await confirm(`Xóa nhân sự "${emp.name}"?`, { danger: true, confirmLabel: 'Xóa' }))) return;
     try {
       const idToken = await user.getIdToken();
       await employeeService.remove(idToken, emp.id);
