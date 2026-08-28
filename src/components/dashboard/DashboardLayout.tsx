@@ -119,9 +119,6 @@ const DashboardLayout = () => {
             display: flex;
             flex-direction: column;
             padding: 1.5rem 1rem;
-            position: sticky;
-            top: 0;
-            align-self: stretch;
             min-height: 100vh;
           }
 
@@ -130,6 +127,8 @@ const DashboardLayout = () => {
             flex-direction: column;
             gap: 0.25rem;
             padding-top: 4.5rem;
+            position: sticky;
+            top: 1.5rem;
           }
 
           .dashboard-nav-link {

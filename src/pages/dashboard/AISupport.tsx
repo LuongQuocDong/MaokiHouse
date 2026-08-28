@@ -18,10 +18,14 @@ const AISupport = () => {
   const [messages, setMessages] = useState<AIChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll only the chat's own message list, not the whole dashboard
+    // page — scrollIntoView on a nested element can drag ancestor
+    // scroll containers (including the page itself) along with it.
+    const el = scrollAreaRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages, sending]);
 
   const send = async (text: string) => {
@@ -53,7 +57,7 @@ const AISupport = () => {
       </div>
 
       <div className="elevated-card d-flex flex-column" style={{ height: '70vh', minHeight: 500 }}>
-        <div className="flex-grow-1 overflow-auto p-4">
+        <div className="flex-grow-1 overflow-auto p-4" ref={scrollAreaRef}>
           {messages.length === 0 ? (
             <div className="text-center py-5">
               <div className="mb-3" style={{ fontSize: '2.5rem' }}>🤖</div>
@@ -97,7 +101,6 @@ const AISupport = () => {
                   </div>
                 </div>
               )}
-              <div ref={bottomRef} />
             </div>
           )}
         </div>
