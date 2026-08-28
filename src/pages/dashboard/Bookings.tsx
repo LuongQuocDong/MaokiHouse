@@ -6,6 +6,21 @@ import { auth } from '../../config/firebase';
 import { bookingService } from '../../services/bookingService';
 import { propertyService } from '../../services/propertyService';
 import type { Booking, BookingSource, BookingStatus, Property } from '../../types';
+import ThemedSelect from '../../components/dashboard/ThemedSelect';
+import ThemedDatePicker from '../../components/dashboard/ThemedDatePicker';
+
+const STATUS_OPTIONS: { value: BookingStatus; label: string }[] = [
+  { value: 'confirmed', label: 'Đã xác nhận' },
+  { value: 'pending', label: 'Chờ xác nhận' },
+  { value: 'cancelled', label: 'Đã hủy' },
+];
+
+const SOURCE_OPTIONS: { value: BookingSource; label: string }[] = [
+  { value: 'airbnb', label: 'Airbnb' },
+  { value: 'booking', label: 'Booking.com' },
+  { value: 'agoda', label: 'Agoda' },
+  { value: 'direct', label: 'Trực tiếp' },
+];
 
 const STATUS_LABELS: Record<BookingStatus, string> = {
   confirmed: 'Đã xác nhận',
@@ -156,23 +171,24 @@ const Bookings = () => {
       </div>
 
       <div className="d-flex gap-2 mb-3 flex-wrap">
-        <Form.Select style={{ maxWidth: 220 }} value={filterProperty} onChange={(e) => setFilterProperty(e.target.value)}>
-          <option value="">Tất cả bất động sản</option>
-          {properties.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
-        </Form.Select>
-        <Form.Select style={{ maxWidth: 180 }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-          <option value="">Tất cả trạng thái</option>
-          <option value="confirmed">Đã xác nhận</option>
-          <option value="pending">Chờ xác nhận</option>
-          <option value="cancelled">Đã hủy</option>
-        </Form.Select>
-        <Form.Select style={{ maxWidth: 180 }} value={filterSource} onChange={(e) => setFilterSource(e.target.value)}>
-          <option value="">Tất cả kênh</option>
-          <option value="airbnb">Airbnb</option>
-          <option value="booking">Booking.com</option>
-          <option value="agoda">Agoda</option>
-          <option value="direct">Trực tiếp</option>
-        </Form.Select>
+        <ThemedSelect
+          style={{ minWidth: 220 }}
+          value={filterProperty}
+          onChange={setFilterProperty}
+          options={[{ value: '', label: 'Tất cả phòng' }, ...properties.map((p) => ({ value: p.id, label: p.title }))]}
+        />
+        <ThemedSelect
+          style={{ minWidth: 180 }}
+          value={filterStatus}
+          onChange={setFilterStatus}
+          options={[{ value: '', label: 'Tất cả trạng thái' }, ...STATUS_OPTIONS]}
+        />
+        <ThemedSelect
+          style={{ minWidth: 180 }}
+          value={filterSource}
+          onChange={setFilterSource}
+          options={[{ value: '', label: 'Tất cả kênh' }, ...SOURCE_OPTIONS]}
+        />
       </div>
 
       <div className="elevated-card">
@@ -221,10 +237,11 @@ const Bookings = () => {
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Phòng</Form.Label>
-            <Form.Select value={form.propertyId} onChange={(e) => setForm({ ...form, propertyId: e.target.value })}>
-              <option value="">Chọn bất động sản</option>
-              {properties.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
-            </Form.Select>
+            <ThemedSelect
+              value={form.propertyId}
+              onChange={(v) => setForm({ ...form, propertyId: v })}
+              options={[{ value: '', label: 'Chọn phòng' }, ...properties.map((p) => ({ value: p.id, label: p.title }))]}
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Tên khách</Form.Label>
@@ -233,30 +250,29 @@ const Bookings = () => {
           <div className="row">
             <div className="col-6 mb-3">
               <Form.Label>Nhận phòng</Form.Label>
-              <Form.Control type="date" value={form.checkIn} onChange={(e) => setForm({ ...form, checkIn: e.target.value })} />
+              <ThemedDatePicker value={form.checkIn} onChange={(v) => setForm({ ...form, checkIn: v })} />
             </div>
             <div className="col-6 mb-3">
               <Form.Label>Trả phòng</Form.Label>
-              <Form.Control type="date" value={form.checkOut} onChange={(e) => setForm({ ...form, checkOut: e.target.value })} />
+              <ThemedDatePicker value={form.checkOut} onChange={(v) => setForm({ ...form, checkOut: v })} />
             </div>
           </div>
           <div className="row">
             <div className="col-6 mb-3">
               <Form.Label>Kênh</Form.Label>
-              <Form.Select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value as BookingSource })}>
-                <option value="airbnb">Airbnb</option>
-                <option value="booking">Booking.com</option>
-                <option value="agoda">Agoda</option>
-                <option value="direct">Trực tiếp</option>
-              </Form.Select>
+              <ThemedSelect
+                value={form.source}
+                onChange={(v) => setForm({ ...form, source: v as BookingSource })}
+                options={SOURCE_OPTIONS}
+              />
             </div>
             <div className="col-6 mb-3">
               <Form.Label>Trạng thái</Form.Label>
-              <Form.Select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as BookingStatus })}>
-                <option value="confirmed">Đã xác nhận</option>
-                <option value="pending">Chờ xác nhận</option>
-                <option value="cancelled">Đã hủy</option>
-              </Form.Select>
+              <ThemedSelect
+                value={form.status}
+                onChange={(v) => setForm({ ...form, status: v as BookingStatus })}
+                options={STATUS_OPTIONS}
+              />
             </div>
           </div>
           <Form.Group className="mb-3">

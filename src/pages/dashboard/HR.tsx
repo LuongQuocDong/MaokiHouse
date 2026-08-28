@@ -5,6 +5,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
 import { employeeService } from '../../services/employeeService';
 import type { Employee } from '../../types';
+import ThemedSelect from '../../components/dashboard/ThemedSelect';
+
+const STATUS_OPTIONS = [
+  { value: 'active', label: 'Hoạt động' },
+  { value: 'inactive', label: 'Ngừng' },
+];
 
 const emptyForm = { name: '', role: '', email: '', phone: '', status: 'active' as 'active' | 'inactive' };
 
@@ -112,10 +118,11 @@ const HR = () => {
             </div>
             <div className="col-md-1">
               <Form.Label>Trạng thái</Form.Label>
-              <Form.Select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as 'active' | 'inactive' })}>
-                <option value="active">Hoạt động</option>
-                <option value="inactive">Ngừng</option>
-              </Form.Select>
+              <ThemedSelect
+                value={form.status}
+                onChange={(v) => setForm({ ...form, status: v as 'active' | 'inactive' })}
+                options={STATUS_OPTIONS}
+              />
             </div>
             <div className="col-md-1">
               <Button type="submit" disabled={submitting} className="pill-btn w-100" style={{ border: 'none' }}>

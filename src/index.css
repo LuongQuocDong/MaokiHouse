@@ -223,3 +223,136 @@ a:hover {
   filter: invert(24%) sepia(24%) saturate(1200%) hue-rotate(335deg) brightness(90%);
   cursor: pointer;
 }
+
+/* ---- Tom Select (replaces native <select> so the OPEN dropdown list —
+   not just the closed control — can be themed; native <select> options
+   are unstyleable browser UI). ---- */
+.themed-select .ts-wrapper {
+  font-family: var(--font-body);
+}
+
+.themed-select .ts-control {
+  background-color: var(--color-white);
+  border: 1px solid rgba(43, 24, 16, 0.18);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  color: var(--color-ink);
+  box-shadow: none;
+  min-height: 42px;
+}
+
+.themed-select .ts-wrapper.focus .ts-control {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 0.2rem rgba(201, 161, 90, 0.25);
+}
+
+.themed-select .ts-wrapper.single .ts-control:after {
+  border-color: var(--color-primary) transparent transparent transparent;
+}
+
+.themed-select .ts-dropdown {
+  font-family: var(--font-body);
+  border: 1px solid rgba(43, 24, 16, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-elevated);
+  margin-top: 4px;
+}
+
+.themed-select .ts-dropdown .option {
+  padding: 0.55rem 0.85rem;
+  color: var(--color-ink);
+}
+
+.themed-select .ts-dropdown .option.active {
+  background: var(--color-blush);
+  color: var(--color-ink);
+}
+
+.themed-select .ts-dropdown .option.selected {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* ---- Flatpickr (replaces native date input so the calendar POPUP —
+   not just the input box — can be themed) ---- */
+.themed-datepicker {
+  cursor: pointer;
+  background-color: var(--color-white) !important;
+}
+
+.flatpickr-calendar {
+  font-family: var(--font-body);
+  border-radius: 14px;
+  box-shadow: var(--shadow-elevated);
+  border: 1px solid rgba(43, 24, 16, 0.1);
+}
+
+.flatpickr-calendar.arrowTop:before,
+.flatpickr-calendar.arrowTop:after {
+  border-bottom-color: var(--color-white);
+}
+
+.flatpickr-months {
+  padding-top: 0.5rem;
+}
+
+.flatpickr-current-month {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.flatpickr-weekday {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary-dark);
+  background: var(--color-blush);
+}
+
+.flatpickr-day {
+  color: var(--color-ink);
+  border-radius: 8px;
+}
+
+.flatpickr-day.today {
+  border-color: var(--color-gold);
+}
+
+.flatpickr-day:hover,
+.flatpickr-day:focus {
+  background: var(--color-blush);
+  border-color: var(--color-blush);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
+  border-color: transparent;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: rgba(43, 24, 16, 0.3);
+}
+
+span.flatpickr-weekday {
+  color: var(--color-primary-dark);
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: var(--color-gold);
+}

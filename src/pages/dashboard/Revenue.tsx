@@ -6,12 +6,20 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContaine
 import { auth } from '../../config/firebase';
 import { revenueService } from '../../services/revenueService';
 import type { RevenueEntry, RevenueEntryType } from '../../types';
+import ThemedSelect from '../../components/dashboard/ThemedSelect';
+import ThemedDatePicker from '../../components/dashboard/ThemedDatePicker';
 
 const TYPE_LABELS: Record<RevenueEntryType, string> = {
   booking_payout: 'Thanh toán đặt phòng',
   expense: 'Chi phí',
   adjustment: 'Điều chỉnh',
 };
+
+const TYPE_OPTIONS: { value: RevenueEntryType; label: string }[] = [
+  { value: 'booking_payout', label: 'Thanh toán đặt phòng' },
+  { value: 'expense', label: 'Chi phí' },
+  { value: 'adjustment', label: 'Điều chỉnh' },
+];
 
 const emptyForm = { type: 'booking_payout' as RevenueEntryType, amount: '', description: '', date: new Date().toISOString().slice(0, 10) };
 
@@ -127,11 +135,11 @@ const Revenue = () => {
           <Form onSubmit={handleSubmit} className="row g-2 align-items-end">
             <div className="col-md-3">
               <Form.Label>Loại</Form.Label>
-              <Form.Select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as RevenueEntryType })}>
-                <option value="booking_payout">Thanh toán đặt phòng</option>
-                <option value="expense">Chi phí</option>
-                <option value="adjustment">Điều chỉnh</option>
-              </Form.Select>
+              <ThemedSelect
+                value={form.type}
+                onChange={(v) => setForm({ ...form, type: v as RevenueEntryType })}
+                options={TYPE_OPTIONS}
+              />
             </div>
             <div className="col-md-2">
               <Form.Label>Số tiền</Form.Label>
@@ -139,7 +147,7 @@ const Revenue = () => {
             </div>
             <div className="col-md-2">
               <Form.Label>Ngày</Form.Label>
-              <Form.Control type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
+              <ThemedDatePicker value={form.date} onChange={(v) => setForm({ ...form, date: v })} required />
             </div>
             <div className="col-md-3">
               <Form.Label>Mô tả</Form.Label>
