@@ -7,7 +7,10 @@ const Footer = () => {
       className="pt-5 pb-4 mt-5"
       style={{
         backgroundColor: 'var(--color-charcoal)',
-        color: 'var(--color-cream)'
+        color: 'var(--color-cream)',
+        position: 'relative',
+        zIndex: 30, // sits above the dashboard's fixed sidebar (z-index 20),
+        // same way the fixed Header overlays content at the top of the page
       }}
     >
       <div className="container">
