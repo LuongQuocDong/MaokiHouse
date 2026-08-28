@@ -9,6 +9,7 @@ import messagesRouter from './messages';
 import employeesRouter from './employees';
 import revenueRouter from './revenue';
 import channelsRouter from './channels';
+import aiRouter from './ai';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/messages', messagesRouter);
 router.use('/employees', employeesRouter);
 router.use('/revenue', revenueRouter);
 router.use('/channels', channelsRouter);
+router.use('/ai', aiRouter);
 
 export default router;
