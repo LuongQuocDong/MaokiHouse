@@ -1,6 +1,20 @@
 import { firestore } from '../config/firebase';
 
 /**
+ * Firestore rejects `undefined` field values outright (unlike `null`).
+ * Optional fields (e.g. Booking.propertyId?) end up `undefined` when a
+ * form omits them, so strip those keys before every write instead of
+ * making every caller remember to do it.
+ */
+function stripUndefined<T extends Record<string, unknown>>(data: T): T {
+  const result = {} as T;
+  for (const key of Object.keys(data) as (keyof T)[]) {
+    if (data[key] !== undefined) result[key] = data[key];
+  }
+  return result;
+}
+
+/**
  * Generic hostId-scoped Firestore CRUD helper. Every collection created via
  * this factory is implicitly multi-tenant-ready: all reads are filtered by
  * hostId, and hostId is stamped onto every write.
@@ -25,7 +39,7 @@ export function createHostScopedModel<T extends { id: string; hostId: string }>(
     },
 
     async create(hostId: string, data: Omit<T, 'id' | 'hostId'>): Promise<T> {
-      const payload = { ...data, hostId } as Omit<T, 'id'>;
+      const payload = stripUndefined({ ...data, hostId } as Omit<T, 'id'>);
       const ref = await collection().add(payload);
       return { id: ref.id, ...payload } as T;
     },
@@ -35,7 +49,7 @@ export function createHostScopedModel<T extends { id: string; hostId: string }>(
       if (!doc.exists || doc.data()?.hostId !== hostId) {
         throw new Error('NOT_FOUND');
       }
-      await collection().doc(id).update(data as Record<string, unknown>);
+      await collection().doc(id).update(stripUndefined(data as Record<string, unknown>));
     },
 
     async remove(hostId: string, id: string): Promise<void> {
@@ -48,7 +62,7 @@ export function createHostScopedModel<T extends { id: string; hostId: string }>(
 
     // For collections keyed by a fixed id (e.g. ChannelConnection per platform).
     async upsert(hostId: string, id: string, data: Omit<T, 'id'>): Promise<T> {
-      await collection().doc(id).set({ ...data, hostId }, { merge: true });
+      await collection().doc(id).set(stripUndefined({ ...data, hostId } as Record<string, unknown>), { merge: true });
       return { id, ...data } as T;
     },
   };
