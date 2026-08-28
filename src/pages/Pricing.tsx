@@ -63,9 +63,19 @@ const Pricing = () => {
                 <div className="card-body p-4 d-flex flex-column flex-grow-1">
                   <h3 className="h5 mb-2">{h.title}</h3>
                   <div className="mb-3" style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--color-primary-dark)' }}>
-                    {h.price.toLocaleString('en-US')}₫ <span className="fs-6 text-muted fw-normal">/ night</span>
+                    ${h.price.toLocaleString('en-US')} <span className="fs-6 text-muted fw-normal">/ night</span>
                   </div>
-                  <p className="text-muted small flex-grow-1">{h.description}</p>
+                  <p
+                    className="text-muted small flex-grow-1"
+                    style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {h.description}
+                  </p>
                   <Link to={`/detail/${h.id}`} className="pill-btn mt-2 align-self-start">
                     View Details
                   </Link>
