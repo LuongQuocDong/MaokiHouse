@@ -100,9 +100,6 @@ const DashboardLayout = () => {
       <style>
         {`
           .dashboard-shell {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            align-items: stretch;
             min-height: 100vh;
             margin-top: -1.5rem;
             margin-bottom: -1.5rem;
@@ -110,6 +107,13 @@ const DashboardLayout = () => {
           }
 
           .dashboard-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            z-index: 20;
+            overflow-y: auto;
             background-color: #100b09;
             background-image:
               url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23c9a15a' stroke-width='1' opacity='0.07'%3E%3Cpath d='M60 20c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M60 72c8 8 8 20 0 28-8-8-8-20 0-28z'/%3E%3Cpath d='M20 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Cpath d='M72 60c8-8 20-8 28 0-8 8-20 8-28 0z'/%3E%3Ccircle cx='60' cy='60' r='6'/%3E%3Cpath d='M40 40c11 0 20 9 20 20-11 0-20-9-20-20z'/%3E%3Cpath d='M80 40c-11 0-20 9-20 20 11 0 20-9 20-20z'/%3E%3Cpath d='M40 80c11 0 20-9 20-20-11 0-20 9-20 20z'/%3E%3Cpath d='M80 80c-11 0-20-9-20-20 11 0 20 9 20 20z'/%3E%3C/g%3E%3C/svg%3E");
@@ -126,8 +130,6 @@ const DashboardLayout = () => {
             flex-direction: column;
             gap: 0.25rem;
             padding-top: 4.5rem;
-            position: sticky;
-            top: 1.5rem;
           }
 
           .dashboard-nav-link {
@@ -157,10 +159,11 @@ const DashboardLayout = () => {
           }
 
           .dashboard-main {
-            flex: 1;
+            margin-left: 260px;
             min-width: 0;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
           }
 
           .dashboard-topbar {
@@ -213,18 +216,20 @@ const DashboardLayout = () => {
           }
 
           @media (max-width: 900px) {
-            .dashboard-shell {
-              grid-template-columns: 1fr;
-            }
             .dashboard-sidebar {
+              position: static;
+              width: 100%;
+              height: auto;
               flex-direction: row;
               flex-wrap: wrap;
               align-items: center;
             }
+            .dashboard-main {
+              margin-left: 0;
+            }
             .dashboard-nav {
               flex-direction: row;
               flex-wrap: wrap;
-              position: static;
               padding-top: 0;
             }
           }
