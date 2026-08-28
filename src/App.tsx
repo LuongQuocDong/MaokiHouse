@@ -64,7 +64,34 @@ function App() {
   return (
     <Router>
       <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: 'var(--color-background)' }}>
-        <Toaster position="top-right" />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+            style: {
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.92rem',
+              color: 'var(--color-ink)',
+              background: 'var(--color-white)',
+              border: '1px solid rgba(43, 24, 16, 0.1)',
+              borderRadius: '12px',
+              boxShadow: '0 12px 30px rgba(43, 24, 16, 0.16)',
+              padding: '0.75rem 1rem',
+            },
+            success: {
+              iconTheme: { primary: 'var(--color-gold)', secondary: 'var(--color-white)' },
+              style: { borderLeft: '4px solid var(--color-gold)' },
+            },
+            error: {
+              iconTheme: { primary: '#c0392b', secondary: 'var(--color-white)' },
+              style: { borderLeft: '4px solid #c0392b' },
+            },
+            loading: {
+              iconTheme: { primary: 'var(--color-primary)', secondary: 'var(--color-white)' },
+              style: { borderLeft: '4px solid var(--color-primary)' },
+            },
+          }}
+        />
         <Header />
         <main className="flex-grow-1 py-4">
           <Container>
