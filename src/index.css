@@ -185,3 +185,41 @@ a:hover {
 .hero-carousel.full-bleed {
   margin-top: -1.5rem;
 }
+
+/* ---- Dashboard form controls: dropdowns, date pickers, text inputs ----
+   Bootstrap's defaults (blue focus ring, plain gray borders, generic
+   arrow) don't match the site's terracotta/gold palette. Scoped to the
+   dashboard content area so the public site's forms are untouched. */
+.dashboard-content .form-select,
+.dashboard-content .form-control {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background-color: var(--color-white);
+  border: 1px solid rgba(43, 24, 16, 0.18);
+  border-radius: 10px;
+}
+
+.dashboard-content .form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%238a4a34' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+}
+
+.dashboard-content .form-select:focus,
+.dashboard-content .form-control:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 0.2rem rgba(201, 161, 90, 0.25);
+}
+
+.dashboard-content .form-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--color-primary-dark);
+}
+
+/* The native date-picker calendar icon can only be recolored via a CSS
+   filter (no direct color property) — nudges it from default gray-black
+   toward the brand's espresso tone. */
+.dashboard-content input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(24%) sepia(24%) saturate(1200%) hue-rotate(335deg) brightness(90%);
+  cursor: pointer;
+}
