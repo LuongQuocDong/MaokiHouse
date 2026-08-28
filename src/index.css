@@ -259,7 +259,7 @@ a:hover {
   border-color: var(--color-primary) transparent transparent transparent;
 }
 
-.themed-select .ts-dropdown {
+.ts-dropdown {
   font-family: var(--font-body);
   border: 1px solid rgba(43, 24, 16, 0.15);
   border-radius: 10px;
@@ -269,17 +269,17 @@ a:hover {
   margin-top: 4px;
 }
 
-.themed-select .ts-dropdown .option {
+.ts-dropdown .option {
   padding: 0.55rem 0.85rem;
   color: var(--color-ink);
 }
 
-.themed-select .ts-dropdown .option.active {
+.ts-dropdown .option.active {
   background: var(--color-blush);
   color: var(--color-ink);
 }
 
-.themed-select .ts-dropdown .option.selected {
+.ts-dropdown .option.selected {
   background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
   color: var(--color-ink);
   font-weight: 600;
