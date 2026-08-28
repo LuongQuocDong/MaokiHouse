@@ -227,8 +227,17 @@ a:hover {
 /* ---- Tom Select (replaces native <select> so the OPEN dropdown list —
    not just the closed control — can be themed; native <select> options
    are unstyleable browser UI). ---- */
+.themed-select {
+  position: relative;
+  z-index: 1;
+}
+
 .themed-select .ts-wrapper {
   font-family: var(--font-body);
+}
+
+.themed-select .ts-wrapper.dropdown-active {
+  z-index: 60;
 }
 
 .themed-select .ts-control {
@@ -255,6 +264,7 @@ a:hover {
   border: 1px solid rgba(43, 24, 16, 0.15);
   border-radius: 10px;
   overflow: hidden;
+  z-index: 60;
   box-shadow: var(--shadow-elevated);
   margin-top: 4px;
 }
