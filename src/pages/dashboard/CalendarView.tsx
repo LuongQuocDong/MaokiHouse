@@ -105,7 +105,7 @@ const CalendarView = () => {
               </div>
             ))}
           </div>
-          <div style={{ height: 640 }}>
+          <div className="maoki-calendar" style={{ height: 640 }}>
             <Calendar
               localizer={localizer}
               events={events}
@@ -113,14 +113,133 @@ const CalendarView = () => {
               endAccessor="end"
               views={['month']}
               defaultView="month"
+              culture="vi"
+              messages={{
+                today: 'Hôm nay',
+                previous: 'Trước',
+                next: 'Sau',
+                month: 'Tháng',
+                showMore: (total: number) => `+${total} khác`,
+              }}
               onSelectEvent={(event: CalEvent) => setSelected(event.booking)}
               eventPropGetter={(event: CalEvent) => ({
-                style: { backgroundColor: SOURCE_COLORS[event.booking.source], borderRadius: 6, border: 'none' },
+                style: {
+                  backgroundColor: SOURCE_COLORS[event.booking.source],
+                  borderRadius: 8,
+                  border: 'none',
+                  boxShadow: '0 2px 6px rgba(43, 24, 16, 0.18)',
+                },
               })}
             />
           </div>
         </div>
       </div>
+
+      <style>
+        {`
+          .maoki-calendar .rbc-toolbar {
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+          }
+
+          .maoki-calendar .rbc-toolbar button {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--color-ink);
+            background: var(--color-blush);
+            border: none;
+            border-radius: 999px;
+            padding: 0.45rem 1.1rem;
+            transition: all 0.2s ease;
+          }
+
+          .maoki-calendar .rbc-toolbar button:hover {
+            background: var(--color-gold-light);
+            color: var(--color-ink);
+          }
+
+          .maoki-calendar .rbc-toolbar button.rbc-active,
+          .maoki-calendar .rbc-toolbar button.rbc-active:hover {
+            background: linear-gradient(135deg, var(--color-gold), var(--color-primary-light));
+            color: var(--color-ink);
+            box-shadow: var(--shadow-soft);
+          }
+
+          .maoki-calendar .rbc-toolbar-label {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--color-ink);
+            letter-spacing: 0.02em;
+          }
+
+          .maoki-calendar .rbc-month-view,
+          .maoki-calendar .rbc-header,
+          .maoki-calendar .rbc-day-bg,
+          .maoki-calendar .rbc-month-row,
+          .maoki-calendar .rbc-header + .rbc-header,
+          .maoki-calendar .rbc-day-bg + .rbc-day-bg {
+            border-color: rgba(43, 24, 16, 0.1) !important;
+          }
+
+          .maoki-calendar .rbc-month-view {
+            border-radius: 14px;
+            overflow: hidden;
+          }
+
+          .maoki-calendar .rbc-header {
+            padding: 0.6rem 0;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-primary-dark);
+            background: var(--color-blush);
+            border-bottom: none;
+          }
+
+          .maoki-calendar .rbc-off-range-bg {
+            background: rgba(43, 24, 16, 0.035);
+          }
+
+          .maoki-calendar .rbc-off-range {
+            color: rgba(43, 24, 16, 0.35);
+          }
+
+          .maoki-calendar .rbc-today {
+            background-color: var(--color-gold-light);
+            opacity: 0.35;
+          }
+
+          .maoki-calendar .rbc-date-cell {
+            font-family: var(--font-body);
+            font-weight: 600;
+            color: var(--color-ink);
+            padding: 0.35rem 0.5rem;
+          }
+
+          .maoki-calendar .rbc-event {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 2px 6px;
+          }
+
+          .maoki-calendar .rbc-event:focus {
+            outline: 2px solid var(--color-gold);
+          }
+
+          .maoki-calendar .rbc-show-more {
+            font-family: var(--font-body);
+            font-weight: 700;
+            color: var(--color-primary);
+            background: transparent;
+          }
+        `}
+      </style>
 
       <Modal show={!!selected} onHide={() => setSelected(null)} centered>
         <Modal.Header closeButton>
